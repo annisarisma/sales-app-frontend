@@ -1,0 +1,28 @@
+import React, { useEffect } from 'react'
+
+import { LAYOUT_DIRECTION } from '@src/components/Constants/layout'
+import ResetPasswordCreative from '@views/auth/resetPassword/resetPasswordCreative'
+import { Toaster } from 'react-hot-toast'
+import { useSelector } from 'react-redux'
+
+const ResetPasswordCreativePage = () => {
+  const { layoutDirection } = useSelector((state) => state.Layout)
+
+  useEffect(() => {
+    document.title =
+      'Reset Password | Domiex - React JS Admin & Dashboard Template'
+  }, [])
+
+  return (
+    <React.Fragment>
+      <ResetPasswordCreative />
+
+      <Toaster
+        position={'top-right'}
+        reverseOrder={layoutDirection === LAYOUT_DIRECTION.RTL}
+      />
+    </React.Fragment>
+  )
+}
+
+export default ResetPasswordCreativePage
