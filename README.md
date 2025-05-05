@@ -4,7 +4,7 @@
 ## About Sales Application Frontend
 Hi there, welcome to the **Sales Application Frontend** repository. This is a front-end project built with React for a sales management system. It supports dynamic UI interactions, data visualization, and smooth user experience using modern JavaScript tools. Enjoy! 💁‍♀️
 
-### 📖 Libraries I've used:
+### 📖 Libraries I've used
 - React
 - React Router
 - Axios
