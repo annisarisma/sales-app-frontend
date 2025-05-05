@@ -246,8 +246,11 @@ import ProductList from '@src/pages/masterData/products/list'
 // Material
 import MaterialList from '@src/pages/masterData/materials/list'
 
-// Material
+// Inventory
 import InventoryList from '@src/pages/masterData/inventory/list'
+
+// Stock
+import StockList from '@src/pages/masterData/stock/list'
 
 const routes = [
   //dashboards
@@ -269,7 +272,7 @@ const routes = [
   { path: '/masted-data/product', component: <ProductList /> },
   { path: '/masted-data/material', component: <MaterialList /> },
   { path: '/masted-data/inventory', component: <InventoryList /> },
-  { path: '/masted-data/stock', component: <ProductList /> },
+  { path: '/masted-data/stock', component: <StockList /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },
