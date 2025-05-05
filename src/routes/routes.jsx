@@ -240,22 +240,31 @@ import PurchaseOrderList from '@src/pages/transactions/purchaseOrders/list'
 // Sales Order
 import SalesOrderList from '@src/pages/transactions/salesOrders/list'
 
+// Products
+import ProductList from '@src/pages/masterData/products/list'
+
 const routes = [
   //dashboards
   { path: '/', component: <DashboardsPage /> },
   { path: '/dashboards/analytics', component: <Analytics /> },
   { path: '/dashboards/ecommerce', component: <DashboardsPage /> },
   { path: '/dashboards/email', component: <Email /> },
-  { path: '/dashboards/crm', component: <CRM /> },
   { path: '/dashboards/hospital', component: <Hospital /> },
   { path: '/dashboards/file-manager', component: <FileManager /> },
   { path: '/dashboards/projects', component: <Projects /> },
   { path: '/dashboards/school', component: <School /> },
   { path: '/dashboards/music', component: <Music /> },
 
-  //   // transactions
+  // transaction
   { path: '/transaction/purchase-order/list', component: <PurchaseOrderList /> },
   { path: '/transaction/sales-order/list', component: <SalesOrderList /> },
+  
+  // master data
+  { path: '/masted-data/product', component: <ProductList /> },
+  { path: '/masted-data/material', component: <ProductList /> },
+  { path: '/masted-data/inventory', component: <ProductList /> },
+  { path: '/masted-data/stock', component: <ProductList /> },
+
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },
   { path: '/apps/chat/group', component: <Group /> },

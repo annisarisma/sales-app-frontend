@@ -34,7 +34,7 @@ const ProductOptions = [
   { label: 'Accessories', value: 'Accessories' },
 ]
 
-const List = () => {
+const PurchaseOrderList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { productList } = useSelector((state) => state.ProductList)
@@ -57,7 +57,7 @@ const List = () => {
   const [currentPage, setCurrentPage] = useState(1)
   useEffect(() => {
     document.title =
-      'Products Product List | Domiex - React JS Admin & Dashboard Template'
+      'Products Purchase Order List | Domiex - React JS Admin & Dashboard Template'
   }, [])
 
   useEffect(() => {
@@ -171,11 +171,11 @@ const List = () => {
         ),
       },
       {
-        header: 'Product ID ',
+        header: 'Purchase Order ID',
         accessorKey: 'productId',
       },
       {
-        header: 'Product',
+        header: 'Material Name',
         accessorKey: 'productName',
         cell: (value) => {
           return (
@@ -200,32 +200,12 @@ const List = () => {
         },
       },
       {
-        header: 'Category',
+        header: 'Supplier Name',
         accessorKey: 'category',
       },
       {
-        header: 'Stock',
-        accessorKey: '',
-        cell: (value) => {
-          return (
-            <>
-              <label className="switch-group switch-soft">
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    className="sr-only peer"
-                    defaultChecked={value.row.original.status === 'Published'}
-                    onChange={() =>
-                      handleChangeStatusProduct(value.row.original)
-                    }
-                  />
-                  <div className="switch-wrapper peer-checked:!bg-purple-500/15"></div>
-                  <div className="switch-dot peer-checked:translate-x-full rtl:peer-checked:-translate-x-full peer-checked:!bg-purple-500"></div>
-                </div>
-              </label>
-            </>
-          )
-        },
+        header: 'QTY',
+        accessorKey: 'qty',
       },
       {
         header: 'Price',
@@ -233,11 +213,7 @@ const List = () => {
         cell: (value) => <span>${value.getValue()}</span>,
       },
       {
-        header: 'QTY',
-        accessorKey: 'qty',
-      },
-      {
-        header: 'Revenue',
+        header: 'Total Price',
         accessorKey: 'revenue',
         cell: (value) => (
           <Link to="#!" className="">
@@ -472,7 +448,7 @@ const List = () => {
                   handleAddProduct()
                 }}>
                 <Plus className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
-                Add Product
+                Add Purchase Order
               </button>
               <Link
                 to="/apps/ecommerce/products/grid"
@@ -644,4 +620,4 @@ const List = () => {
   )
 }
 
-export default List
+export default PurchaseOrderList
