@@ -2,7 +2,7 @@
 
 
 ## About Sales Application Frontend
-Hi there, welcome to the CSV System repository. Here, I provide a simple documentation and details about the system I've created. Enjoy! 💁‍♀️
+Hi there, welcome to the **Sales Application Frontend** repository. This is a front-end project built with React for a sales management system. It supports dynamic UI interactions, data visualization, and smooth user experience using modern JavaScript tools. Enjoy! 💁‍♀️
 
 ### 📖 Libraries I've used:
 - React
