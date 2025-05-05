@@ -93,7 +93,7 @@ const menu = [
     title: 'Unit',
     lang: 'pe-unit',
     icon: 'anvil',
-    link: '/apps/email/templates/newsletter',
+    link: '/master-data/unit',
     separator: false,
     children: [],
   },

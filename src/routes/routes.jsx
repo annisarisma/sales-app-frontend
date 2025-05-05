@@ -255,6 +255,9 @@ import StockList from '@src/pages/masterData/stock/list'
 // Payment Method
 import PaymentMethodList from '@src/pages/masterData/paymentMethod/list'
 
+// Unit
+import UnitList from '@src/pages/masterData/unit/list'
+
 const routes = [
   //dashboards
   { path: '/', component: <DashboardsPage /> },
@@ -277,6 +280,7 @@ const routes = [
   { path: '/master-data/inventory', component: <InventoryList /> },
   { path: '/master-data/stock', component: <StockList /> },
   { path: '/master-data/payment-method', component: <PaymentMethodList /> },
+  { path: '/master-data/unit', component: <UnitList /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },
