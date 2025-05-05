@@ -98,10 +98,10 @@ const menu = [
     children: [],
   },
   {
-    title: 'Categories',
+    title: 'Category',
     lang: 'pe-category',
     icon: 'anvil',
-    link: '/apps/email/templates/newsletter',
+    link: '/master-data/category',
     separator: false,
     children: [],
   },

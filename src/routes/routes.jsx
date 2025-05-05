@@ -51,7 +51,7 @@ import CalendarLocalize from '@src/pages/apps/calendar/localize'
 import DefaultChat from '@src/pages/apps/chat/default'
 import Group from '@src/pages/apps/chat/group'
 import Video from '@src/pages/apps/chat/video'
-import CategoryList from '@src/pages/apps/ecommerce/category'
+// import CategoryList from '@src/pages/apps/ecommerce/category'
 import OrderList from '@src/pages/apps/ecommerce/orders/list'
 import CreateProduct from '@src/pages/apps/ecommerce/products/create-products'
 import ProductGrid from '@src/pages/apps/ecommerce/products/grid'
@@ -258,6 +258,9 @@ import PaymentMethodList from '@src/pages/masterData/paymentMethod/list'
 // Unit
 import UnitList from '@src/pages/masterData/unit/list'
 
+// Category
+import CategoryList from '@src/pages/masterData/category/list'
+
 const routes = [
   //dashboards
   { path: '/', component: <DashboardsPage /> },
@@ -281,6 +284,7 @@ const routes = [
   { path: '/master-data/stock', component: <StockList /> },
   { path: '/master-data/payment-method', component: <PaymentMethodList /> },
   { path: '/master-data/unit', component: <UnitList /> },
+  { path: '/master-data/category', component: <CategoryList /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },
