@@ -34,7 +34,7 @@ const ProductOptions = [
   { label: 'Accessories', value: 'Accessories' },
 ]
 
-const PurchaseOrderList = () => {
+const InventoryList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { productList } = useSelector((state) => state.ProductList)
@@ -57,7 +57,7 @@ const PurchaseOrderList = () => {
   const [currentPage, setCurrentPage] = useState(1)
   useEffect(() => {
     document.title =
-      'Products Purchase Order List | Domiex - React JS Admin & Dashboard Template'
+      'Products Inventory List | Domiex - React JS Admin & Dashboard Template'
   }, [])
 
   useEffect(() => {
@@ -171,7 +171,7 @@ const PurchaseOrderList = () => {
         ),
       },
       {
-        header: 'Purchase Order ID',
+        header: 'Inventory ID',
         accessorKey: 'productId',
       },
       {
@@ -424,16 +424,16 @@ const PurchaseOrderList = () => {
 
   return (
     <React.Fragment>
-      <BreadCrumb subTitle="Transactions" title="Purchase Order" />
+      <BreadCrumb subTitle="Transactions" title="Inventory" />
       {/* header */}
       <div className="card">
         {/* card header  */}
         <div className="card-header">
           <div className="flex flex-wrap items-center gap-5">
             <div className="grow">
-              <h6 className="mb-1 card-title">Purchase Order</h6>
+              <h6 className="mb-1 card-title">Inventory</h6>
               <p className="text-gray-500 dark:text-dark-500">
-                Track your purchase order's progress to boost your stocks.
+                Track your inventory's progress to boost your stocks.
               </p>
             </div>
             <div className="flex flex-wrap gap-2 shrink-0">
@@ -448,7 +448,7 @@ const PurchaseOrderList = () => {
                   handleAddProduct()
                 }}>
                 <Plus className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
-                Add Purchase Order
+                Add Inventory
               </button>
               <Link
                 to="/apps/ecommerce/products/grid"
@@ -620,4 +620,4 @@ const PurchaseOrderList = () => {
   )
 }
 
-export default PurchaseOrderList
+export default InventoryList
