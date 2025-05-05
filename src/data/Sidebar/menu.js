@@ -106,10 +106,10 @@ const menu = [
     children: [],
   },
   {
-    title: 'Cost of Goods Manufactured',
-    lang: 'pe-cost-of-goods-manufactured',
+    title: 'Cost of Goods Sold',
+    lang: 'pe-cost-of-goods-sold',
     icon: 'anvil',
-    link: '/apps/email/templates/newsletter',
+    link: '/master-data/cost-of-goods-sold',
     separator: false,
     children: [],
   },

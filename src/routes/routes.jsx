@@ -261,6 +261,9 @@ import UnitList from '@src/pages/masterData/unit/list'
 // Category
 import CategoryList from '@src/pages/masterData/category/list'
 
+// Cost Of Goods Sold
+import CostOfGoodsSoldList from '@src/pages/masterData/costOfGoodsSold/list'
+
 const routes = [
   //dashboards
   { path: '/', component: <DashboardsPage /> },
@@ -285,6 +288,7 @@ const routes = [
   { path: '/master-data/payment-method', component: <PaymentMethodList /> },
   { path: '/master-data/unit', component: <UnitList /> },
   { path: '/master-data/category', component: <CategoryList /> },
+  { path: '/master-data/cost-of-goods-sold', component: <CostOfGoodsSoldList /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },
