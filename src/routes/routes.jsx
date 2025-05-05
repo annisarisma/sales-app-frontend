@@ -252,6 +252,9 @@ import InventoryList from '@src/pages/masterData/inventory/list'
 // Stock
 import StockList from '@src/pages/masterData/stock/list'
 
+// Payment Method
+import PaymentMethodList from '@src/pages/masterData/paymentMethod/list'
+
 const routes = [
   //dashboards
   { path: '/', component: <DashboardsPage /> },
@@ -269,10 +272,11 @@ const routes = [
   { path: '/transaction/sales-order/list', component: <SalesOrderList /> },
   
   // master data
-  { path: '/masted-data/product', component: <ProductList /> },
-  { path: '/masted-data/material', component: <MaterialList /> },
-  { path: '/masted-data/inventory', component: <InventoryList /> },
-  { path: '/masted-data/stock', component: <StockList /> },
+  { path: '/master-data/product', component: <ProductList /> },
+  { path: '/master-data/material', component: <MaterialList /> },
+  { path: '/master-data/inventory', component: <InventoryList /> },
+  { path: '/master-data/stock', component: <StockList /> },
+  { path: '/master-data/payment-method', component: <PaymentMethodList /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },
