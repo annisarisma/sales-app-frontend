@@ -243,6 +243,9 @@ import SalesOrderList from '@src/pages/transactions/salesOrders/list'
 // Products
 import ProductList from '@src/pages/masterData/products/list'
 
+// Material
+import MaterialList from '@src/pages/masterData/materials/list'
+
 const routes = [
   //dashboards
   { path: '/', component: <DashboardsPage /> },
@@ -261,7 +264,7 @@ const routes = [
   
   // master data
   { path: '/masted-data/product', component: <ProductList /> },
-  { path: '/masted-data/material', component: <ProductList /> },
+  { path: '/masted-data/material', component: <MaterialList /> },
   { path: '/masted-data/inventory', component: <ProductList /> },
   { path: '/masted-data/stock', component: <ProductList /> },
 
