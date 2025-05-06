@@ -4,7 +4,7 @@ import { initStore } from '@src/utils/init_store'
 
 const initialState = {
   userList: initStore('d-product-list'),
-  currentProduct: null,
+  userById: null,
   isLoading: false,
   editMode: false,
 }
@@ -17,6 +17,30 @@ const ListSlice = createSlice({
     getUserList(state, action) {
       state.userList = action.payload
     },
+
+    // get user by id
+    getUserByIdData(state, action) {
+      state.userById = action.payload
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     // get user data
     addUser(state, action) {
@@ -29,14 +53,14 @@ const ListSlice = createSlice({
       }
     },
 
-    // set current product record
-    setCurrentProduct(state, action) {
-      state.currentProduct = action.payload
-    },
-
     // set current edit mode
     setCurrentEditMode(state, action) {
       state.editMode = action.payload
+    },
+
+    // set current product record
+    setCurrentUser(state, action) {
+      state.currentUser = action.payload
     },
 
     // update product list record status
@@ -77,7 +101,7 @@ const ListSlice = createSlice({
         )
         if (existingProductIndex !== -1) {
           state.userList[existingProductIndex] = updatedProduct
-          state.currentProduct = updatedProduct
+          state.currentUser = updatedProduct
         }
       }
     },
@@ -95,8 +119,9 @@ const ListSlice = createSlice({
 
 export const {
   getUserList,
+  getUserByIdData,
   addUser,
-  setCurrentProduct,
+  setCurrentUser,
   changeStatusProductList,
   setCurrentEditMode,
   addProductList,

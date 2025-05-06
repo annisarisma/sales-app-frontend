@@ -266,7 +266,7 @@ import CostOfGoodsSoldList from '@src/pages/masterData/costOfGoodsSold/list'
 
 // User
 import UserList from '@src/pages/masterData/user/index-user'
-import UserCreate from '@src/pages/masterData/user/create-user'
+import UserCreate from '@src/pages/masterData/user/form-user'
 
 const routes = [
   //dashboards
@@ -297,6 +297,7 @@ const routes = [
   // User
   { path: '/master-data/user', component: <UserList /> },
   { path: '/master-data/user/create-user', component: <UserCreate /> },
+  { path: '/master-data/user/update-user/:id', component: <UserCreate /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },

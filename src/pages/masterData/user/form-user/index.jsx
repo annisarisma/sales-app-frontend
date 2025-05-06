@@ -4,11 +4,13 @@ import BreadCrumb from '@src/components/Common/BreadCrumb'
 import { countryCode } from '@src/data'
 import {
   addUserData,
+  updateUser,
+  getUserById,
 } from '@src/slices/masterData/users/thunk'
 import Flatpickr from 'react-flatpickr'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Select from 'react-select'
 
 const roleItems = [
@@ -22,13 +24,11 @@ const categoryItems = [
 ]
 
 const UserCreate = () => {
-  const { editMode, currentPatients, patients } = useSelector(
-    (state) => state.Patients
-  )
-
-  const dispatch = useDispatch()
-
-  const navigate = useNavigate()
+  const { id, userById, userList } = useSelector((state) => state.UserList)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     document.title =
@@ -36,10 +36,14 @@ const UserCreate = () => {
   }, [])
 
   useEffect(() => {
-    if (!patients) {
-      dispatch(getPatientsData())
+    if (!userById) {
+      dispatch(getUserById(id));
+    } else {
+      setUserData(userById);
+      console.log(userById);
     }
-  }, [patients, dispatch])
+  }, [userById, dispatch]);
+  
 
   const [selectedDialCode, setSelectedDialCode] = useState(
     countryCode[0].dial_code
@@ -66,6 +70,8 @@ const UserCreate = () => {
     }
   }
 
+  console.log('check id: ', id);
+
   const [selectedDate, setSelectedDate] = useState(undefined)
   const {
     register,
@@ -84,13 +90,13 @@ const UserCreate = () => {
 
   const resetForm = useCallback(() => {
     reset({
-      _id: patients && patients.length > 0 ? patients.length + 1 : 1,
+      _id: userList && userList.length > 0 ? userList.length + 1 : 1,
       username: '',
       email: '',
       role: '',
     })
     clearErrors()
-  }, [reset, clearErrors, patients])
+  }, [reset, clearErrors, userList])
 
   const formatDate = (date) => {
     const options = {
@@ -102,13 +108,15 @@ const UserCreate = () => {
   }
 
   const submitForm = (data) => {
-    if (editMode && currentPatients) {
-      const updatedPatients = { ...data, _id: currentPatients._id }
-      dispatch(editPatientsData(updatedPatients))
+    if (id && userData) {
+      const updatedResponse = { ...data, _id: userData.usr_id }
+      
+      // thunk process
+      dispatch(updateUser(updatedResponse))
       navigate('/master-data/user')
     } else {
-      const newUser = { ...data, _id: patients.length + 1 }
-      dispatch(addUserData(newUser))
+      const createdResponse = { ...data, _id: userList.length + 1 }
+      dispatch(addUserData(createdResponse))
       navigate('/master-data/user')
       resetForm()
       clearErrors()
@@ -116,39 +124,15 @@ const UserCreate = () => {
   }
 
   useEffect(() => {
-    if (editMode && currentPatients) {
-      setValue('date', formatDate(new Date(currentPatients.date)))
-      setValue('first_name', currentPatients.first_name)
-      setValue('last_name', currentPatients.last_name)
-      setValue('middle_name', currentPatients.middle_name)
-      setValue('age', currentPatients.age)
-      setValue('weight', currentPatients.weight)
-      setValue('height', currentPatients.height)
-      setValue('blood_group', currentPatients.blood_group)
-      setValue('occupation', currentPatients.occupation)
-      setValue('city', currentPatients.city)
-      setValue('stateName', currentPatients.stateName)
-      setValue('countryName', currentPatients.countryName)
-      setValue('zipCode', currentPatients.zipCode)
-      setValue('familyDoctor', currentPatients.familyDoctor)
-      setValue('referringDoctor', currentPatients.referringDoctor)
-      setValue('pharmacyName', currentPatients.pharmacyName)
-      setValue('email', currentPatients.email)
-      setValue('phoneNumber', currentPatients.phoneNumber)
-      setValue('emergencyNumber', currentPatients.emergencyNumber)
-      setValue('insurance', currentPatients.insurance)
-      setValue('location', currentPatients.location)
-      setValue('treatmentType', currentPatients.treatmentType)
-      setValue('doctorName', currentPatients.doctorName)
-      setValue('role', currentPatients.role)
-      setValue('image', currentPatients.image)
-      setSelectedDate(new Date(currentPatients.date))
-      setValue('role', currentPatients.role)
+    if (userData) {
+      setValue('username', userData.username)
+      setValue('email', userData.email)
+      setValue('role', userData.rol_id)
     } else {
       resetForm()
       clearErrors()
     }
-  }, [resetForm, currentPatients, editMode, setValue, clearErrors])
+  }, [resetForm, userData, id, setValue, clearErrors])
 
   useEffect(() => {
     const handleBeforeUnload = () => {

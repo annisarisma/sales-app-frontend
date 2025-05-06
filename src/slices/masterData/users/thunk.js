@@ -18,9 +18,10 @@ import {
   deleteProductList,
   editProductList,
   getUserList,
+  getUserByIdData,
   addUser,
   setCurrentEditMode,
-  setCurrentProduct,
+  setCurrentUser,
 } from './reducer'
 
 const USER_API = REACT_APP_USER_API
@@ -32,6 +33,22 @@ export const getUserListData = () => async (dispatch) => {
     const response = await api.get(USER_API)
     console.log('response: ', response);
     dispatch(getUserList(response))
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      'Product List Fetch Failed'
+    ErrorToast(errorMessage)
+    console.error('Error fetching Product data:', error)
+  }
+}
+
+// get user by id
+export const getUserById = (id) => async (dispatch) => {
+  try {
+    const response = await api.get(`${USER_API}/${id}`)
+    console.log('response get by id: ', response);
+    dispatch(getUserByIdData(response))
   } catch (error) {
     const errorMessage =
       error.response?.data?.message ||
@@ -64,6 +81,84 @@ export const addUserData = (newRecord) => async (dispatch) => {
   }
 }
 
+// add new patients
+export const updateUser = (record, id) => async (dispatch) => {
+  try {
+    const response = await api.put(`${USER_API}`,record,'User')
+    const { message } = response
+    AddToast(message || 'User record added successfully')
+    // addLocalStorageRecord('d-hospital-patients-list', record)
+    dispatch(addUser(record))
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      'User addition failed.'
+    ErrorToast(errorMessage)
+    console.error('Error in patients adding record:', error)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// set edit mode for product
+export const setEditModeUserList = (editMode) => async (dispatch) => {
+  try {
+    const response = { data: editMode }
+    dispatch(setCurrentEditMode(response.data))
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
+// set current user
+export const setCurrentUserList = (user) => async (dispatch) => {
+  try {
+    const response = { data: user }
+    dispatch(setCurrentUser(response.data))
+    return response.data
+  } catch (error) {
+    return error
+  }
+}
+
 // set product list
 export const setProductListStatus = (product) => async (dispatch) => {
   try {
@@ -75,27 +170,7 @@ export const setProductListStatus = (product) => async (dispatch) => {
   }
 }
 
-// set edit mode for product
-export const setEditModeProductList = (editMode) => async (dispatch) => {
-  try {
-    const response = { data: editMode }
-    dispatch(setCurrentEditMode(response.data))
-    return response.data
-  } catch (error) {
-    return error
-  }
-}
 
-// set current product
-export const setCurrentProductList = (product) => async (dispatch) => {
-  try {
-    const response = { data: product }
-    dispatch(setCurrentProduct(response.data))
-    return response.data
-  } catch (error) {
-    return error
-  }
-}
 
 // add product
 export const addProductListData = (newRecord) => async (dispatch) => {

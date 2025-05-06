@@ -13,8 +13,8 @@ import TableContainer from '@src/components/CustomComponents/Table/Table'
 import {
   deleteProductListData,
   getUserListData,
-  setCurrentProductList,
-  setEditModeProductList,
+  setCurrentUserList,
+  setEditModeUserList,
   setProductListStatus,
 } from '@src/slices/masterData/users/thunk'
 import { Download, Filter, LayoutGrid, Plus, Search, Trash } from 'lucide-react'
@@ -41,7 +41,7 @@ const UserList = () => {
   const { layoutDirection } = useSelector((state) => state.Layout)
   const [deletedListData, setDeletedListData] = useState([])
   const [selectAll, setSelectAll] = useState(false)
-  const [allProductList, setAllUserList] = React.useState([])
+  const [allUserList, setAllUserList] = React.useState([])
   const [selectedProductOption, setSelectedProductOption] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [deletedRecord, setDeletedRecord] = useState(null)
@@ -75,17 +75,16 @@ const UserList = () => {
     [dispatch]
   )
 
-  const handleEditProduct = useCallback(
+  const handleEditUser = useCallback(
     (user) => {
-      dispatch(setEditModeProductList(true))
-      dispatch(setCurrentProductList(user))
-      navigate('/apps/ecommerce/products/create-products')
+      dispatch(setEditModeUserList(true))
+      navigate(`/master-data/user/update-user/${user.usr_id}`)
     },
     [dispatch, navigate]
   )
 
   const handleCreateUser = () => {
-    dispatch(setEditModeProductList(false))
+    dispatch(setEditModeUserList(false))
     localStorage.setItem('previousPage', '/master-data/user')
     navigate('/master-data/user/create-user')
   }
@@ -112,10 +111,10 @@ const UserList = () => {
     if (selectAll) {
       setDeletedListData([])
     } else {
-      setDeletedListData(allProductList.map((order) => order._id))
+      setDeletedListData(allUserList.map((order) => order._id))
     }
     setSelectAll((prev) => !prev)
-  }, [selectAll, allProductList])
+  }, [selectAll, allUserList])
   const handleDeleteRecord = (_id) => {
     setIsModalOpen(true)
     setDeletedRecord([_id])
@@ -137,7 +136,7 @@ const UserList = () => {
   // overview
   const handleOverviewProduct = useCallback(
     (user) => {
-      dispatch(setCurrentProductList(user))
+      dispatch(setCurrentUserList(user))
       navigate('/apps/ecommerce/products/overview')
     },
     [dispatch, navigate]
@@ -213,7 +212,7 @@ const UserList = () => {
                 <button
                   className="dropdown-item "
                   onClick={() => {
-                    handleEditProduct(value.row.original)
+                    handleEditUser(value.row.original)
                   }}>
                   <i className="align-middle ltr:mr-2 rtl:ml-2 ri-pencil-line"></i>{' '}
                   <span>Edit</span>
@@ -237,7 +236,7 @@ const UserList = () => {
     [
       deletedListData,
       handleChangeStatusProduct,
-      handleEditProduct,
+      handleEditUser,
       handleOverviewProduct,
       handleSelectAll,
       selectAll,
@@ -246,7 +245,7 @@ const UserList = () => {
 
   // Filter data based on search term and applied filters
   const filteredData = useMemo(() => {
-    return allProductList.filter((item) => {
+    return allUserList.filter((item) => {
       const matchesSearchTerm =
         item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -256,7 +255,7 @@ const UserList = () => {
       )
     })
   }, [
-    allProductList,
+    allUserList,
     searchTerm,
     appliedFilters,
     selectedProductOption,

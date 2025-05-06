@@ -336,10 +336,10 @@ const Topbar = ({ searchMenu, searchText, toggleSidebar }) => {
         </div>
       </div>
       <ToolsAppsModal open={open} handleCloseModal={handleCloseModal} />
-      <SettingsModal
+      {/* <SettingsModal
         open={isSettingModalOpen}
         handleCloseModal={handleCloseThemeModal}
-      />
+      /> */}
       <div className="hidden overflow-hidden nav-pattern">
         <svg
           xmlns="http://www.w3.org/2000/svg"
