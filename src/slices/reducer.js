@@ -1,6 +1,8 @@
 // store.ts (or store.js if you're not using TypeScript)
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
+import userListReducer from './masterData/users/reducer'
+
 import calendarReducer from './calendar/reducer'
 import contactChatReducer from './chat/contact/reducer'
 import defaultChatListReducer from './chat/default/reducer'
@@ -44,6 +46,7 @@ import teacherListReducers from './school/teachers/reducer'
 
 // Combine your reducers
 const rootReducer = combineReducers({
+  UserList: userListReducer,
   Layout: layoutReducer,
   Contact: contactReducer,
   Deal: dealReducer,

@@ -32,7 +32,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://node-api.pixeleyez.com',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         allowOrigin: true,
       },

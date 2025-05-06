@@ -12,11 +12,11 @@ import {
 import TableContainer from '@src/components/CustomComponents/Table/Table'
 import {
   deleteProductListData,
-  getProductListData,
+  getUserListData,
   setCurrentProductList,
   setEditModeProductList,
   setProductListStatus,
-} from '@src/slices/ecommerce/products/list/thunk'
+} from '@src/slices/masterData/users/thunk'
 import { Download, Filter, LayoutGrid, Plus, Search, Trash } from 'lucide-react'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
@@ -37,11 +37,11 @@ const ProductOptions = [
 const UserList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { productList } = useSelector((state) => state.ProductList)
+  const { userList } = useSelector((state) => state.UserList)
   const { layoutDirection } = useSelector((state) => state.Layout)
   const [deletedListData, setDeletedListData] = useState([])
   const [selectAll, setSelectAll] = useState(false)
-  const [allProductList, setAllProductList] = React.useState([])
+  const [allProductList, setAllUserList] = React.useState([])
   const [selectedProductOption, setSelectedProductOption] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [deletedRecord, setDeletedRecord] = useState(null)
@@ -61,33 +61,33 @@ const UserList = () => {
   }, [])
 
   useEffect(() => {
-    if (!productList) {
-      dispatch(getProductListData())
+    if (!userList) {
+      dispatch(getUserListData())
     } else {
-      setAllProductList(productList)
+      setAllUserList(userList)
     }
-  }, [productList, dispatch])
+  }, [userList, dispatch])
 
   const handleChangeStatusProduct = useCallback(
-    (product) => {
-      dispatch(setProductListStatus(product))
+    (user) => {
+      dispatch(setProductListStatus(user))
     },
     [dispatch]
   )
 
   const handleEditProduct = useCallback(
-    (product) => {
+    (user) => {
       dispatch(setEditModeProductList(true))
-      dispatch(setCurrentProductList(product))
+      dispatch(setCurrentProductList(user))
       navigate('/apps/ecommerce/products/create-products')
     },
     [dispatch, navigate]
   )
 
-  const handleAddProduct = () => {
+  const handleCreateUser = () => {
     dispatch(setEditModeProductList(false))
-    localStorage.setItem('previousPage', '/apps/ecommerce/products/list')
-    navigate('/apps/ecommerce/products/create-products')
+    localStorage.setItem('previousPage', '/master-data/user')
+    navigate('/master-data/user/create-user')
   }
 
   // status color
@@ -136,13 +136,13 @@ const UserList = () => {
   }
   // overview
   const handleOverviewProduct = useCallback(
-    (product) => {
-      dispatch(setCurrentProductList(product))
+    (user) => {
+      dispatch(setCurrentProductList(user))
       navigate('/apps/ecommerce/products/overview')
     },
     [dispatch, navigate]
   )
-  // handle select product
+  // handle select user
   const handleSelectProduct = (selectedOption) => {
     setSelectedProductOption(selectedOption)
   }
@@ -172,36 +172,19 @@ const UserList = () => {
       },
       {
         header: 'User ID',
-        accessorKey: 'productId',
+        accessorKey: 'usr_id',
       },
       {
         header: 'Username',
         accessorKey: 'username',
-        cell: (value) => {
-          return (
-            <>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center p-1 border border-gray-200 rounded-sm dark:border-dark-800 size-9">
-                  <img
-                    src={value.row.original.image1}
-                    alt="valueImg"
-                    className="rounded"
-                    width={26}
-                    height={26}
-                  />
-                </div>
-                <h6>
-                  <Link to="#"></Link>
-                  {value.row.original.productName}
-                </h6>
-              </div>
-            </>
-          )
-        },
       },
       {
         header: 'Email',
         accessorKey: 'email',
+      },
+      {
+        header: 'Role',
+        accessorKey: 'rol_id',
       },
       {
         header: 'Action',
@@ -265,30 +248,11 @@ const UserList = () => {
   const filteredData = useMemo(() => {
     return allProductList.filter((item) => {
       const matchesSearchTerm =
-        item.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchTerm.toLowerCase())
-
-      const matchesPriceRange =
-        item.price >= priceRange[0] && item.price <= priceRange[1]
-
-      const matchesTypeProducts =
-        !selectedProductOption ||
-        selectedProductOption.value === 'All' ||
-        item.category === selectedProductOption.value
-      const matchesPublishedFilter = appliedFilters.isPublished
-        ? item.status === 'Published'
-        : true
-      const matchesInactiveFilter = appliedFilters.isInactive
-        ? item.status === 'Inactive'
-        : true
+        item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchTerm.toLowerCase())
 
       return (
-        matchesSearchTerm &&
-        matchesTypeProducts &&
-        matchesPublishedFilter &&
-        matchesInactiveFilter &&
-        matchesPriceRange
+        matchesSearchTerm
       )
     })
   }, [
@@ -341,7 +305,7 @@ const UserList = () => {
   }
 
   const exportTable = () => {
-    if (!productList || productList.length === 0) return
+    if (!userList || userList.length === 0) return
 
     // Prepare CSV headers based on ProductListItem interface
     const headers = [
@@ -372,9 +336,9 @@ const UserList = () => {
     ]
 
     let csvContent = headers.join(',') + '\n'
-    productList.forEach((product) => {
+    userList.forEach((user) => {
       const row = headers.map((header) => {
-        const value = product[header]
+        const value = user[header]
         if (Array.isArray(value)) {
           return `"${value.join(',')}"`
         }
@@ -419,7 +383,7 @@ const UserList = () => {
                 className="btn btn-primary"
                 onClick={(e) => {
                   e.preventDefault()
-                  handleAddProduct()
+                  handleCreateUser()
                 }}>
                 <Plus className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
                 Add User

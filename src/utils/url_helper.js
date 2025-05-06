@@ -1,6 +1,9 @@
 // Helper function to generate API URLs dynamically
 const apiUrl = (endpoint) => endpoint
 
+// User API
+export const REACT_APP_USER_API = apiUrl('/api/users')
+
 // CUSTOMER APIS
 export const REACT_APP_CUSTOMER = apiUrl('/api/customers')
 

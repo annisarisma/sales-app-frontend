@@ -18,7 +18,7 @@ api.interceptors.request.use(function (config) {
 api.get = async (url) => {
   // Assuming url contains the endpoint to fetch data from the API
   try {
-    url = 'https://node-api.pixeleyez.com' + url
+    url = 'http://localhost:3000' + url
     const response = await axios.get(url) // Make a real GET request to fetch the data
     return response.data
   } catch (error) {
@@ -32,34 +32,26 @@ api.post = async (api, newRecord, field) => {
   const isApi = import.meta.env.VITE_REACT_APP_IS_API_ACTIVE === 'true'
   let data = []
 
-  if (isApi) {
-    try {
-      const response = await axios.post(
-        api,
-        { ...newRecord, _id: newRecord.id },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-
-      if (response.status === 200 || response.status === 201) {
-        return response.data
-      } else {
-        throw new Error(response.data?.message || 'Failed to add new record!')
+  try {
+    const response = await axios.post(
+      api,
+      { ...newRecord, _id: newRecord.id },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || 'Internal Server Error!'
-      throw new Error(errorMessage)
+    )
+
+    if (response.status === 200 || response.status === 201) {
+      return response.data
+    } else {
+      throw new Error(response.data?.message || 'Failed to add new record!')
     }
-  } else {
-    data.push(newRecord)
-    return Promise.resolve({
-      data: newRecord,
-      message: `${field} record added successfully`,
-    })
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || 'Internal Server Error!'
+    throw new Error(errorMessage)
   }
 }
 
