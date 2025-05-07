@@ -113,6 +113,22 @@ const menu = [
     separator: false,
     children: [],
   },
+  {
+    title: 'User',
+    lang: 'pe-user',
+    icon: 'anvil',
+    link: '/master-data/user',
+    separator: false,
+    children: [],
+  },
+  {
+    title: 'Role',
+    lang: 'pe-role',
+    icon: 'anvil',
+    link: '/master-data/role',
+    separator: false,
+    children: [],
+  },
 ]
 
 export { menu }

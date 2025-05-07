@@ -16,6 +16,8 @@
   "pe-unit": "Units",
   "pe-category": "Category",
   "pe-cost-of-goods-sold": "Cost of Goods Sold",
+  "pe-user": "User",
+  "pe-role": "Role",
 
   "pe-ecommerce": "eCommerce",
   "pe-email": "Email",
@@ -127,7 +129,6 @@
   "pe-documents": "Documents",
   "pe-notes": "Notes",
   "pe-pricing": "Pricing",
-  "pe-user": "User",
   "pe-admin": "Admin",
   "pe-contact-us": "Contact Us",
   "pe-faqs": "FAQ's",
