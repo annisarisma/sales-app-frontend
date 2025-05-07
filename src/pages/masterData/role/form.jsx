@@ -1,139 +1,78 @@
 import React, { useCallback, useEffect, useState } from 'react'
-
 import BreadCrumb from '@src/components/Common/BreadCrumb'
 import { countryCode } from '@src/data'
 import {
-  addUserData,
-  updateUser,
-  getUserById,
-} from '@src/slices/masterData/users/thunk'
-import Flatpickr from 'react-flatpickr'
-import { Controller, useForm } from 'react-hook-form'
+  createRole,
+  updateRole,
+  setEditMode,
+} from '@src/slices/masterData/roles/thunk'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import Select from 'react-select'
+import { Controller, useForm } from 'react-hook-form'
 
-const roleItems = [
-  { label: 'Admin', value: 'Admin' },
-  { label: 'Superadmin', value: 'Superadmin' },
-]
-
-const categoryItems = [
-  { label: 'Male', value: 'Male' },
-  { label: 'Female', value: 'Female' },
-]
 
 const RoleCreate = () => {
-  const { userById, userList } = useSelector((state) => state.UserList)
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const [userData, setUserData] = useState(null);
+  const { roleById, editMode, roleList } = useSelector((state) => state.RoleList)
 
   useEffect(() => {
     document.title =
-      'Create Role | Domiex - React JS Admin & Dashboard Template'
+      'Create Role | Sales Application'
   }, [])
 
   useEffect(() => {
-    if (!userById) {
-      dispatch(getUserById(id));
-    } else {
-      setUserData(userById);
-    }
-  }, [userById, dispatch]);
-  
+    setEditMode(editMode)
+  }, [editMode])
 
-  const [selectedDialCode, setSelectedDialCode] = useState(
-    countryCode[0].dial_code
-  )
-  const [selectedFormat, setSelectedFormat] = useState(countryCode[0].format)
 
-  //Emergency Number
-  const [selectedEmergencyCode, setSelectedEmergencyCode] = useState(
-    countryCode[0].dial_code
-  )
-  const [selectedFormat2, setSelectedFormat2] = useState(countryCode[0].format)
 
-  const handleEmergencyCodeChange = (event) => {
-    const selectedCountry = countryCode.find(
-      (country) => country.dial_code === event.target.value
-    )
-
-    if (selectedCountry) {
-      setSelectedEmergencyCode(selectedCountry.dial_code)
-      setSelectedFormat2(selectedCountry.format)
-    } else {
-      setSelectedEmergencyCode('')
-      setSelectedFormat2('')
-    }
-  }
-
-  console.log('check id: ', id);
-
-  const [selectedDate, setSelectedDate] = useState(undefined)
   const {
     handleSubmit,
-
+    reset,
 
 
     register,
     setValue,
-    reset,
     clearErrors,
-    control,
     formState: { errors },
   } = useForm()
 
-  const handleCountryChange = (selectedOption) => {
-    setSelectedDialCode(selectedOption.value)
-    setSelectedFormat(selectedOption.format)
-  }
-
   const resetForm = useCallback(() => {
     reset({
-      usrId: userList && userList.length > 0 ? userList.length + 1 : 1,
-      username: '',
-      email: '',
-      role: '',
+      role_code: '',
+      role_name: '',
+      role_description: '',
     })
     clearErrors()
-  }, [reset, clearErrors, userList])
+  }, [reset, clearErrors, roleList])
 
-  const formatDate = (date) => {
-    const options = {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    }
-    return date.toLocaleDateString('en-GB', options).replace(',', '')
-  }
-
-  // submit form
   const submitForm = (data) => {
-    if (id && userData) {
-      const updatedRequest = { ...data, usrId: userData.usr_id }
-      dispatch(updateUser(updatedRequest))
-      navigate('/master-data/user')
+    if (editMode && roleById) {
+      // updated
+      const updatedRequest = { ...data, usrId: roleById.usr_id }
+      dispatch(updateRole(updatedRequest))
+      navigate('/master-data/role')
     } else {
-      const createdRequest = { ...data, usrId: userList.length + 1 }
-      dispatch(addUserData(createdRequest))
-      navigate('/master-data/user')
+      // created
+      const createdRequest = { ...data, rolId: roleList.length + 1 }
+      dispatch(createRole(createdRequest))
+      navigate('/master-data/role')
       resetForm()
       clearErrors()
     }
   }
 
   useEffect(() => {
-    if (userData) {
-      setValue('username', userData.username)
-      setValue('email', userData.email)
-      setValue('role', userData.rol_id)
+    if (roleById) {
+      setValue('username', roleById.username)
+      setValue('email', roleById.email)
+      setValue('role', roleById.rol_id)
     } else {
       resetForm()
       clearErrors()
     }
-  }, [resetForm, userData, id, setValue, clearErrors])
+  }, [resetForm, roleById, setValue, clearErrors])
 
   useEffect(() => {
     const handleBeforeUnload = () => {

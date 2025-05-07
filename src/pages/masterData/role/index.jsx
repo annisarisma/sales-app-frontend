@@ -36,13 +36,17 @@ const ProductOptions = [
 const RoleList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { roleList, roleById } = useSelector((state) => state.RoleList)
   
+  // data
+  const { roleList, roleById } = useSelector((state) => state.RoleList)
+  const [ allRoleList, setAllRoleList ] = React.useState([])
+
+  // crud
   const [deletedRecord, setDeletedRecord] = useState(null)
   const [deletedSelectedRecord, setDeletedSelectedData] = useState([])
 
-
-
+  // filter
+  const [appliedFilters, setAppliedFilters] = useState({isPublished: false, isInactive: false})
 
 
 
@@ -51,16 +55,11 @@ const RoleList = () => {
 
   const { layoutDirection } = useSelector((state) => state.Layout)
   const [selectAll, setSelectAll] = useState(false)
-  const [allUserList, setAllUserList] = React.useState([])
   const [selectedProductOption, setSelectedProductOption] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [isPublishedFilter, setIsPublishedFilter] = useState(false)
   const [isInactiveFilter, setIsInactiveFilter] = useState(false)
-  const [appliedFilters, setAppliedFilters] = useState({
-    isPublished: false,
-    isInactive: false,
-  })
   const [priceRange, setPriceRange] = useState([0, 100000])
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
@@ -76,10 +75,7 @@ const RoleList = () => {
     if (!roleList) {
       dispatch(getRole())
     } else {
-      console.log('isi user list:', roleList);
-      console.log('isi user by id:', roleById);
-      setAllUserList(roleList)
-      console.log('isi all user list:', allUserList);
+      setAllRoleList(roleList)
     }
   }, [roleList, dispatch])
 
@@ -94,21 +90,19 @@ const RoleList = () => {
   const handleUpdateRecord = useCallback(
     (user) => {
       dispatch(setEditMode(true))
-      navigate(`/master-data/role/update-role/${user.usr_id}`)
+      navigate(`/master-data/role/update-role/${user.rol_id}`)
     },
     [dispatch, navigate]
   )
 
   // handle destroy record
   const handleDestroyRecord = (usrId) => {
-    console.log('isi delete id: ', usrId);
     setIsModalOpen(true)
     setDeletedRecord([usrId])
   }
 
   // handle destroy record selected
   const handleDestroyRecordSelected = () => {
-    console.log('isi delete id selected: ', deletedSelectedRecord)
     dispatch(destroyUserSelected(deletedSelectedRecord))
     setDeletedSelectedData([])
     setSelectAll(false)
@@ -167,10 +161,10 @@ const RoleList = () => {
     if (selectAll) {
       setDeletedSelectedData([])
     } else {
-      setDeletedSelectedData(allUserList.map((order) => order._id))
+      setDeletedSelectedData(allRoleList.map((order) => order._id))
     }
     setSelectAll((prev) => !prev)
-  }, [selectAll, allUserList])
+  }, [selectAll, allRoleList])
 
 
   // handle select user
@@ -190,14 +184,14 @@ const RoleList = () => {
             onChange={handleSelectAll}
           />
         ),
-        accessorKey: 'usr_id',
+        accessorKey: 'rol_id',
         enableSorting: false,
         cell: ({ row }) => (
           <input
             className="input-check input-check-primary"
             type="checkbox"
-            checked={deletedSelectedRecord.includes(row.original.usr_id)}
-            onChange={() => handleSelectRecord(row.original.usr_id)}
+            checked={deletedSelectedRecord.includes(row.original.rol_id)}
+            onChange={() => handleSelectRecord(row.original.rol_id)}
           />
         ),
       },
@@ -208,16 +202,16 @@ const RoleList = () => {
         cell: ({ row }) => row.index + 1,
       },
       {
-        header: 'Username',
-        accessorKey: 'username',
+        header: 'Role Code',
+        accessorKey: 'role_code',
       },
       {
-        header: 'Email',
-        accessorKey: 'email',
+        header: 'Role Name',
+        accessorKey: 'role_name',
       },
       {
-        header: 'Role',
-        accessorKey: 'rol_id',
+        header: 'Role Description',
+        accessorKey: 'role_description',
       },
       {
         header: 'Action',
@@ -256,7 +250,7 @@ const RoleList = () => {
                   className="dropdown-item"
                   onClick={(e) => {
                     e.preventDefault()
-                    handleDestroyRecord(value.row.original.usr_id)
+                    handleDestroyRecord(value.row.original.rol_id)
                   }}>
                   <i className="align-middle ltr:mr-2 rtl:ml-2 ri-delete-bin-line"></i>{' '}
                   <span>Delete</span>
@@ -277,17 +271,17 @@ const RoleList = () => {
 
   // Filter data based on search term and applied filters
   const filteredData = useMemo(() => {
-    return allUserList.filter((item) => {
+    return allRoleList.filter((item) => {
       const matchesSearchTerm =
-        item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchTerm.toLowerCase())
-
+        item.role_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.role_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.role_description.toLowerCase().includes(searchTerm.toLowerCase())
       return (
         matchesSearchTerm
       )
     })
   }, [
-    allUserList,
+    allRoleList,
     searchTerm,
     appliedFilters,
     selectedProductOption,

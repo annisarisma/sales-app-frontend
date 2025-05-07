@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { initStore } from '@src/utils/init_store'
 
 const initialState = {
-  roleList: initStore('d-product-list'),
-  userById: null,
+  roleList: null,
+  roleById: null,
   isLoading: false,
   editMode: false,
 }
@@ -19,7 +19,17 @@ const ListSlice = createSlice({
 
     // get user by id
     getUserByIdData(state, action) {
-      state.userById = action.payload
+      state.roleById = action.payload
+    },
+
+    // create
+    createRoleReducer(state, action) {
+      const response = action.payload
+      if (state.roleList !== null) {
+        state.roleList.unshift(response)
+      } else {
+        state.roleList = [response]
+      }
     },
 
     // update user
@@ -58,13 +68,13 @@ const ListSlice = createSlice({
 
 export const {
   getRoleReducer,
+  createRoleReducer,
 
 
 
 
   destroyUserSelectedSuccess,
   getUserByIdData,
-  addUser,
   updateUserSuccess,
   setCurrentUser,
   changeStatusProductList,

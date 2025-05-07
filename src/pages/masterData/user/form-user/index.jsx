@@ -30,6 +30,8 @@ const UserCreate = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState(null);
 
+  console.log('user list ini: ', userList);
+
   useEffect(() => {
     document.title =
       'Create User | Domiex - React JS Admin & Dashboard Template'
@@ -115,6 +117,7 @@ const UserCreate = () => {
       dispatch(updateUser(updatedRequest))
       navigate('/master-data/user')
     } else {
+      console.log('user list: ', userList);
       console.log('masuk add');
       const createdResponse = { ...data, usrId: userList.length + 1 }
       dispatch(addUserData(createdResponse))

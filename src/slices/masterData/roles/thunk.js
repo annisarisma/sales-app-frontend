@@ -13,24 +13,29 @@ import {
   destroyUserSelectedSuccess,
   destroyUserSuccess,
   getUserByIdData,
-  addUser,
+  createRoleReducer,
   updateUserSuccess,
 } from './reducer'
 
 const ROLE_API = REACT_APP_ROLE_API
 const IsApi = import.meta.env.VITE_REACT_APP_IS_API_ACTIVE === 'true'
 
-// get role
+// get
 export const getRole = () => async (dispatch) => {
   try {
+    // axios
     const response = await api.get(ROLE_API)
-    console.log('response: ', response);
+    
+    // reducer
     dispatch(getRoleReducer(response))
   } catch (error) {
+    // message
     const errorMessage =
       error.response?.data?.message ||
       error.message ||
       'Product List Fetch Failed'
+    
+    // toast and console
     ErrorToast(errorMessage)
     console.error('Error fetching Product data:', error)
   }
@@ -40,7 +45,6 @@ export const getRole = () => async (dispatch) => {
 export const getUserById = (id) => async (dispatch) => {
   try {
     const response = await api.get(`${ROLE_API}/${id}`)
-    console.log('response get by id: ', response);
     dispatch(getUserByIdData(response))
   } catch (error) {
     const errorMessage =
@@ -52,39 +56,40 @@ export const getUserById = (id) => async (dispatch) => {
   }
 }
 
-// create user
-export const addUserData = (newRecord) => async (dispatch) => {
+// create
+export const createRole = (record) => async (dispatch) => {
   try {
-    const response = await api.post(
-      ROLE_API,
-      newRecord,
-      'User'
-    )
+    // axios
+    const response = await api.post(ROLE_API,record,'Role')
     const { message } = response
-    AddToast(message || 'User record added successfully')
-    dispatch(addUser(newRecord))
+    
+    // toast and reducer
+    AddToast(message)
+    dispatch(createRoleReducer(record))
   } catch (error) {
+    // message
     const errorMessage =
       error.response?.data?.message ||
       error.message ||
-      'User addition failed.'
+      'Role addition failed.'
+    
+    // toast and console
     ErrorToast(errorMessage)
     console.error('Error in patients adding record:', error)
   }
 }
 
 // update user
-export const updateUser = (record) => async (dispatch) => {
+export const updateRole = (record) => async (dispatch) => {
   try {
-    console.log(record);
-    const response = await api.put(`${ROLE_API}`, record, 'User')
+    const response = await api.put(`${ROLE_API}`, record, 'Role')
     
     const { message } = response;
-    AddToast(message || 'User record added successfully')
+    AddToast(message || 'Role record added successfully')
      
     dispatch(updateUserSuccess(record))
   } catch (error) {
-    const errorMessage = error.response?.data?.message || error.message || 'User addition failed.'
+    const errorMessage = error.response?.data?.message || error.message || 'Role addition failed.'
     ErrorToast(errorMessage)
     
     console.error('Error in patients adding record:', error)
@@ -94,20 +99,17 @@ export const updateUser = (record) => async (dispatch) => {
 // destroy user
 export const destroyUser = (reviews) => async (dispatch) => {
   try {
-    console.log('thunk reviews: ', reviews);
     const deletePromises = reviews.map(async (usrId) => {
-      const response = await api.delete(ROLE_API, usrId, 'User')
+      const response = await api.delete(ROLE_API, usrId, 'Role')
       const { message } = response
-      console.log('thunk message:', message);
-      DeleteToast(message || 'User deleted successfully')
+      DeleteToast(message || 'Role deleted successfully')
       return usrId
     })
 
     const deletedUser = await Promise.all(deletePromises)
     dispatch(destroyUserSuccess(deletedUser))
   } catch (error) {
-    console.log('masuk catch: ', error);
-    const errorMessage = error.response?.data?.message || error.message || 'User record deletion failed.'
+    const errorMessage = error.response?.data?.message || error.message || 'Role record deletion failed.'
     ErrorToast(errorMessage)
     console.error('Error in deleting products: ', error)
   }
@@ -117,9 +119,9 @@ export const destroyUser = (reviews) => async (dispatch) => {
 export const destroyUserSelected = (reviews) => async (dispatch) => {
   try {
     const deletePromises = reviews.map(async (usrId) => {
-      const response = await api.delete(ROLE_API, usrId, 'User')
+      const response = await api.delete(ROLE_API, usrId, 'Role')
       const { message } = response
-      DeleteToast(message || 'User deleted successfully')
+      DeleteToast(message || 'Role deleted successfully')
       return usrId
     })
 
@@ -129,7 +131,7 @@ export const destroyUserSelected = (reviews) => async (dispatch) => {
     const errorMessage =
       error.response?.data?.message ||
       error.message ||
-      'User record deletion failed.'
+      'Role record deletion failed.'
     ErrorToast(errorMessage)
     console.error('Error in deleting products: ', error)
   }

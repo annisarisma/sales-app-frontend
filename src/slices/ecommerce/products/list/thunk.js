@@ -30,9 +30,7 @@ export const getProductListData = () => async (dispatch) => {
   try {
     if (IsApi === false) {
       const responseData = await getLocalStorage('d-product-list')
-      console.log(responseData);
       if (!responseData) {
-        console.log('response: kosong');
         const response = await api.get(PRODUCT_LIST_API)
         createLocalStorage('d-product-list', response)
         dispatch(getProductList(response))

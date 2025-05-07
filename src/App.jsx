@@ -36,6 +36,8 @@ import {
   getStudentListData,
 } from './slices/thunk'
 
+import { getRole } from './slices/masterData/roles/thunk'
+
 function App() {
   useEffect(() => {
     const htmlElement = document.documentElement
@@ -47,6 +49,14 @@ function App() {
 
   useEffect(() => {
     const dispatch = store.dispatch // Use AppDispatch
+    dispatch(getRole())
+
+
+
+
+
+
+
     dispatch(getECommerceShopCartData())
     dispatch(getOrderData())
     dispatch(getInvoiceListData())

@@ -177,7 +177,7 @@ const CreateProduct = () => {
   } = useForm()
 
   useEffect(() => {
-    if (editMode && currentProduct) {
+    if (editMode && f) {
       Object.keys(currentProduct).forEach((key) => {
         setValue(key, currentProduct[key])
       })
