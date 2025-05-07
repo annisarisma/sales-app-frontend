@@ -58,7 +58,7 @@ api.post = async (api, newRecord, field) => {
 api.put = async (api, updatedRecord, field) => {
   try {
     const response = await axios.put(
-      `${api}/${updatedRecord.usrId}`,
+      `${api}/${updatedRecord._id}`,
       updatedRecord,
       {
         headers: {

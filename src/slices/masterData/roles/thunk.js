@@ -14,7 +14,8 @@ import {
 
   destroyUserSelectedSuccess,
   destroyUserSuccess,
-  updateUserSuccess,
+  updateRoleReducer,
+  setEditModeReducer,
 } from './reducer'
 
 const ROLE_API = REACT_APP_ROLE_API
@@ -41,7 +42,7 @@ export const getRole = () => async (dispatch) => {
   }
 }
 
-// get user by id
+// get by id
 export const getRoleById = (id) => async (dispatch) => {
   try {
     const response = await api.get(`${ROLE_API}/${id}`)
@@ -82,16 +83,19 @@ export const createRole = (record) => async (dispatch) => {
 // update user
 export const updateRole = (record) => async (dispatch) => {
   try {
+    // axios
     const response = await api.put(`${ROLE_API}`, record, 'Role')
-    
     const { message } = response;
-    AddToast(message || 'Role record added successfully')
-     
-    dispatch(updateUserSuccess(record))
+
+    // toast and reducer
+    AddToast(message || 'Role record added successfully') 
+    dispatch(updateRoleReducer(record))
   } catch (error) {
+    // message
     const errorMessage = error.response?.data?.message || error.message || 'Role addition failed.'
-    ErrorToast(errorMessage)
     
+    // toast and console
+    ErrorToast(errorMessage)
     console.error('Error in patients adding record:', error)
   }
 }

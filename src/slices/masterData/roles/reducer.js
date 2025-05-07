@@ -33,11 +33,11 @@ const ListSlice = createSlice({
     },
 
     // update user
-    updateUserSuccess(state, action) {
+    updateRoleReducer(state, action) {
       const updatedUser = action.payload
       if (state.roleList !== null) {
         const existingUser = state.roleList.findIndex(
-          (userItem) => userItem.usr_id === updatedUser.usrId
+          (userItem) => userItem.rol_id === updatedUser._id
         )
         if (existingUser !== -1) {
           state.roleList[existingUser] = updatedUser
@@ -75,13 +75,13 @@ export const {
   getRoleReducer,
   getRoleByIdReducer,
   createRoleReducer,
+  updateRoleReducer,
   setEditModeReducer,
 
 
 
 
   destroyUserSelectedSuccess,
-  updateUserSuccess,
   setCurrentUser,
   changeStatusProductList,
   addProductList,

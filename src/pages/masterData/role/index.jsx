@@ -92,7 +92,7 @@ const RoleList = () => {
   const handleUpdateRecord = useCallback(
     (role) => {
       dispatch(setEditMode(true))
-      dispatch(getRoleById(role))
+      dispatch(getRoleById(role.rol_id))
       navigate(`/master-data/role/update-role/${role.rol_id}`)
     },
     [dispatch, navigate]

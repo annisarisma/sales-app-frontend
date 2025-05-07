@@ -16,17 +16,6 @@ const RoleCreate = () => {
   const navigate = useNavigate();
   const { roleById, editMode, roleList } = useSelector((state) => state.RoleList)
 
-  useEffect(() => {
-    document.title =
-      'Create Role | Sales Application'
-  }, [])
-
-  useEffect(() => {
-    setEditMode(editMode)
-  }, [editMode])
-
-
-
   const {
     handleSubmit,
     reset,
@@ -47,14 +36,14 @@ const RoleCreate = () => {
     clearErrors()
   }, [reset, clearErrors, roleList])
 
+  // function submit
   const submitForm = (data) => {
+    console.log('submit information: ', editMode, roleById)
     if (editMode && roleById) {
-      // updated
-      const updatedRequest = { ...data, usrId: roleById.usr_id }
+      const updatedRequest = { ...data, _id: roleById.rol_id }
       dispatch(updateRole(updatedRequest))
       navigate('/master-data/role')
     } else {
-      // created
       const createdRequest = { ...data, rolId: roleList.length + 1 }
       dispatch(createRole(createdRequest))
       navigate('/master-data/role')
@@ -63,18 +52,30 @@ const RoleCreate = () => {
     }
   }
 
+  // set title
+  useEffect(() => {
+    document.title =
+      'Create Role | Sales Application'
+  }, [])
+
+  // set edit mode
+  useEffect(() => {
+    setEditMode(editMode)
+  }, [editMode])
+
+  // set value
   useEffect(() => {
     if (roleById) {
-      console.log(roleById);
-      setValue('username', roleById.username)
-      setValue('email', roleById.email)
-      setValue('role', roleById.rol_id)
+      setValue('role_code', roleById.role_code)
+      setValue('role_name', roleById.role_name)
+      setValue('role_description', roleById.role_description)
     } else {
       resetForm()
       clearErrors()
     }
   }, [resetForm, roleById, setValue, clearErrors])
 
+  // 
   useEffect(() => {
     const handleBeforeUnload = () => {
       resetForm()
