@@ -34,32 +34,32 @@ const ListSlice = createSlice({
 
     // update user
     updateRoleReducer(state, action) {
-      const updatedUser = action.payload
+      const updatedRole = action.payload
       if (state.roleList !== null) {
         const existingUser = state.roleList.findIndex(
-          (userItem) => userItem.rol_id === updatedUser._id
+          (roleItem) => roleItem.rol_id === updatedRole._id
         )
         if (existingUser !== -1) {
-          state.roleList[existingUser] = updatedUser
-          state.currentUser = updatedUser
+          state.roleList[existingUser] = updatedRole
+          state.currentUser = updatedRole
         }
       }
     },
 
     // destroy user
-    destroyUserSuccess(state, action) {
+    destroyRoleReducer(state, action) {
       if (state.roleList !== null) {
         state.roleList = state.roleList.filter(
-          (item) => !action.payload.includes(item._id)
+          (item) => !action.payload.includes(item.rol_id)
         )
       }
     },
 
     // destroy user selected
-    destroyUserSelectedSuccess(state, action) {
+    destroyRoleSelectedReducer(state, action) {
       if (state.roleList !== null) {
         state.roleList = state.roleList.filter(
-          (item) => !action.payload.includes(item.usr_id)
+          (item) => !action.payload.includes(item.rol_id)
         )
       }
     },
@@ -76,16 +76,8 @@ export const {
   getRoleByIdReducer,
   createRoleReducer,
   updateRoleReducer,
+  destroyRoleReducer,
+  destroyRoleSelectedReducer,
   setEditModeReducer,
-
-
-
-
-  destroyUserSelectedSuccess,
-  setCurrentUser,
-  changeStatusProductList,
-  addProductList,
-  editProductList,
-  destroyUserSuccess,
 } = ListSlice.actions
 export default ListSlice.reducer

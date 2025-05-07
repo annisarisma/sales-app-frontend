@@ -14,9 +14,8 @@ import {
   getRole,
   getRoleById,
   setEditMode,
-
-  destroyUserSelected,
-  destroyUser,
+  destroyRole,
+  destroyRoleSelected,
 } from '@src/slices/masterData/roles/thunk'
 import { Download, Filter, LayoutGrid, Plus, Search, Trash } from 'lucide-react'
 import Slider from 'rc-slider'
@@ -50,11 +49,7 @@ const RoleList = () => {
   // filter
   const [appliedFilters, setAppliedFilters] = useState({isPublished: false, isInactive: false})
 
-
-
-
-
-
+  // app setting
   const { layoutDirection } = useSelector((state) => state.Layout)
   const [selectAll, setSelectAll] = useState(false)
   const [selectedProductOption, setSelectedProductOption] = useState(null)
@@ -65,7 +60,7 @@ const RoleList = () => {
   const [priceRange, setPriceRange] = useState([0, 100000])
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
-  
+
   // set tittle
   useEffect(() => {
     document.title =
@@ -99,14 +94,14 @@ const RoleList = () => {
   )
 
   // handle destroy record
-  const handleDestroyRecord = (usrId) => {
+  const handleDestroyRecord = (rolId) => {
     setIsModalOpen(true)
-    setDeletedRecord([usrId])
+    setDeletedRecord([rolId])
   }
 
   // handle destroy record selected
   const handleDestroyRecordSelected = () => {
-    dispatch(destroyUserSelected(deletedSelectedRecord))
+    dispatch(destroyRoleSelected(deletedSelectedRecord))
     setDeletedSelectedData([])
     setSelectAll(false)
   }
@@ -114,67 +109,35 @@ const RoleList = () => {
   // destroy record
   const destroyRecord = () => {
     if (deletedRecord && isModalOpen) {
-      dispatch(destroyUser(deletedRecord))
+      dispatch(destroyRole(deletedRecord))
       setIsModalOpen(false)
       setDeletedRecord(null)
     }
   }
 
   // handle checkboxes
-  const handleSelectRecord = (usrId) => {
+  const handleSelectRecord = (rolId) => {
     setDeletedSelectedData((prev) =>
-      prev.includes(usrId) ? prev.filter((item) => item !== usrId) : [...prev, usrId]
+      prev.includes(rolId) ? prev.filter((item) => item !== rolId) : [...prev, rolId]
     )
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // status color
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Published':
-        return 'badge badge-green'
-      case 'Inactive':
-        return 'badge badge-gray'
-      default:
-        return 'badge'
-    }
-  }
-
-  // select all or unselect all
+  // handle all select
   const handleSelectAll = useCallback(() => {
     if (selectAll) {
       setDeletedSelectedData([])
     } else {
-      setDeletedSelectedData(allRoleList.map((order) => order._id))
+      setDeletedSelectedData(allRoleList.map((order) => order.rol_id))
     }
     setSelectAll((prev) => !prev)
   }, [selectAll, allRoleList])
 
-
-  // handle select user
+  // handle select
   const handleSelectProduct = (selectedOption) => {
     setSelectedProductOption(selectedOption)
   }
-  // table header
+
+  // table
   const columns = useMemo(
     () => [
       {
@@ -272,7 +235,7 @@ const RoleList = () => {
     ]
   )
 
-  // Filter data based on search term and applied filters
+  // filtered data for table
   const filteredData = useMemo(() => {
     return allRoleList.filter((item) => {
       const matchesSearchTerm =

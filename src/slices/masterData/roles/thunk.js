@@ -9,12 +9,9 @@ import {
   getRoleReducer,
   getRoleByIdReducer,
   createRoleReducer,
-
-  
-
-  destroyUserSelectedSuccess,
-  destroyUserSuccess,
   updateRoleReducer,
+  destroyRoleReducer,
+  destroyRoleSelectedReducer,
   setEditModeReducer,
 } from './reducer'
 
@@ -66,7 +63,7 @@ export const createRole = (record) => async (dispatch) => {
     
     // toast and reducer
     AddToast(message)
-    dispatch(createRoleReducer(record))
+    dispatch(createRoleReducer(response.data))
   } catch (error) {
     // message
     const errorMessage =
@@ -89,7 +86,7 @@ export const updateRole = (record) => async (dispatch) => {
 
     // toast and reducer
     AddToast(message || 'Role record added successfully') 
-    dispatch(updateRoleReducer(record))
+    dispatch(updateRoleReducer(response.data))
   } catch (error) {
     // message
     const errorMessage = error.response?.data?.message || error.message || 'Role addition failed.'
@@ -101,41 +98,55 @@ export const updateRole = (record) => async (dispatch) => {
 }
 
 // destroy user
-export const destroyUser = (reviews) => async (dispatch) => {
+export const destroyRole = (reviews) => async (dispatch) => {
   try {
-    const deletePromises = reviews.map(async (usrId) => {
-      const response = await api.delete(ROLE_API, usrId, 'Role')
+    const deletePromises = reviews.map(async (rolId) => {
+      // axios
+      const response = await api.delete(ROLE_API, rolId, 'Role')
       const { message } = response
+      
+      // toast
       DeleteToast(message || 'Role deleted successfully')
-      return usrId
+      return rolId
     })
 
-    const deletedUser = await Promise.all(deletePromises)
-    dispatch(destroyUserSuccess(deletedUser))
+    // reducer
+    const deletedRole = await Promise.all(deletePromises)
+    dispatch(destroyRoleReducer(deletedRole))
   } catch (error) {
+    // message
     const errorMessage = error.response?.data?.message || error.message || 'Role record deletion failed.'
+    
+    // toast and console
     ErrorToast(errorMessage)
     console.error('Error in deleting products: ', error)
   }
 }
 
 // destroy user selected
-export const destroyUserSelected = (reviews) => async (dispatch) => {
+export const destroyRoleSelected = (reviews) => async (dispatch) => {
   try {
-    const deletePromises = reviews.map(async (usrId) => {
-      const response = await api.delete(ROLE_API, usrId, 'Role')
+    const deletePromises = reviews.map(async (rolId) => {
+      // axios
+      const response = await api.delete(ROLE_API, rolId, 'Role')
       const { message } = response
+      
+      // toast
       DeleteToast(message || 'Role deleted successfully')
-      return usrId
+      return rolId
     })
 
-    const deletedUser = await Promise.all(deletePromises)
-    dispatch(destroyUserSelectedSuccess(deletedUser))
+    // reducer
+    const deletedRole = await Promise.all(deletePromises)
+    dispatch(destroyRoleSelectedReducer(deletedRole))
   } catch (error) {
+    // message
     const errorMessage =
       error.response?.data?.message ||
       error.message ||
       'Role record deletion failed.'
+    
+    // toast and console
     ErrorToast(errorMessage)
     console.error('Error in deleting products: ', error)
   }
