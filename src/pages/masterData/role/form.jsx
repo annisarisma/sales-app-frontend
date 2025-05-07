@@ -23,7 +23,7 @@ const categoryItems = [
   { label: 'Female', value: 'Female' },
 ]
 
-const UserCreate = () => {
+const RoleCreate = () => {
   const { userById, userList } = useSelector((state) => state.UserList)
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const UserCreate = () => {
 
   useEffect(() => {
     document.title =
-      'Create User | Domiex - React JS Admin & Dashboard Template'
+      'Create Role | Domiex - React JS Admin & Dashboard Template'
   }, [])
 
   useEffect(() => {
@@ -73,8 +73,11 @@ const UserCreate = () => {
 
   const [selectedDate, setSelectedDate] = useState(undefined)
   const {
-    register,
     handleSubmit,
+
+
+
+    register,
     setValue,
     reset,
     clearErrors,
@@ -106,18 +109,15 @@ const UserCreate = () => {
     return date.toLocaleDateString('en-GB', options).replace(',', '')
   }
 
+  // submit form
   const submitForm = (data) => {
     if (id && userData) {
-      console.log('masuk edit');
       const updatedRequest = { ...data, usrId: userData.usr_id }
-      // thunk process
-      console.log('masuk edit data: ', updatedRequest);
       dispatch(updateUser(updatedRequest))
       navigate('/master-data/user')
     } else {
-      console.log('masuk add');
-      const createdResponse = { ...data, usrId: userList.length + 1 }
-      dispatch(addUserData(createdResponse))
+      const createdRequest = { ...data, usrId: userList.length + 1 }
+      dispatch(addUserData(createdRequest))
       navigate('/master-data/user')
       resetForm()
       clearErrors()
@@ -149,101 +149,74 @@ const UserCreate = () => {
 
   return (
     <React.Fragment>
-      <BreadCrumb title="Create User" subTitle="Master Data" />
+      <BreadCrumb title="Create Role" subTitle="Master Data" />
         <div className="card">
-          <div className="card-header">
-            <h6 className="card-title">User Account</h6>
-          </div>
           <div className="card-body">
             <form onSubmit={handleSubmit(submitForm)}>
               <div className="grid grid-cols-12 gap-space">
+
+                {/* Role Code */}
                 <div className="col-span-12 md:col-span-6 xl:col-span-6">
-                  <label htmlFor="username" className="form-label">
-                    Username <span className="text-red-500">*</span>
+                  <label htmlFor="role_code" className="form-label">
+                    Role Code <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    id="username"
+                    id="role_code"
                     className="form-input"
-                    placeholder="Enter your username"
+                    placeholder="Enter your role code"
                     pattern="[A-Za-z ]+"
                     title="Only letters and spaces allowed"
-                    {...register('username', {
-                      required: 'Username is required.',
+                    {...register('role_code', {
+                      required: 'Role code is required.',
                     })}
                   />
-                  {errors.username && (
-                    <span className="text-red-500">{errors.username.message}</span>
+                  {errors.role_code && (
+                    <span className="text-red-500">{errors.role_code.message}</span>
                   )}
                 </div>
+                
+                {/* Role Name */}
                 <div className="col-span-12 md:col-span-6 xl:col-span-6">
-                  <label htmlFor="emailInput" className="form-label">
-                    Email <span className="text-red-500">*</span>
+                  <label htmlFor="role_name" className="form-label">
+                    Role Name <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="email"
-                    id="emailInput"
+                    type="text"
+                    id="role_name"
                     className="form-input"
-                    placeholder="example@example.com"
-                    {...register('email', { required: 'Email is required.' })}
+                    placeholder="Enter your role name"
+                    pattern="[A-Za-z ]+"
+                    title="Only letters and spaces allowed"
+                    {...register('role_name', {
+                      required: 'Role name is required.',
+                    })}
                   />
-                  {errors.email && (
-                    <span className="text-red-500">{errors.email.message}</span>
+                  {errors.role_name && (
+                    <span className="text-red-500">{errors.role_name.message}</span>
                   )}
                 </div>
-
-                {/* Role */}
-                <div className="col-span-12 md:col-span-6 xl:col-span-6">
-                  <label htmlFor="roleSelect" className="form-label">
-                    Role <span className="text-red-500">*</span>
+                
+                {/* Role Description */}
+                <div className="col-span-12 md:col-span-6 xl:col-span-12">
+                  <label htmlFor="role_description" className="form-label">
+                    Role Description <span className="text-red-500">*</span>
                   </label>
-                  <div id="roleSelect">
-                    <Controller
-                      name="rol_id"
-                      control={control}
-                      rules={{ required: 'Role is required' }} // Validation rule
-                      render={({ field: { onChange, value } }) => (
-                        <Select
-                          classNamePrefix="select"
-                          options={roleItems}
-                          value={roleItems.find(
-                            (option) => option.value === value
-                          )}
-                          onChange={(selectedOption) =>
-                            onChange(selectedOption?.value)
-                          }
-                          placeholder="Select Gender"
-                          id="roleSelect"
-                        />
-                      )}
-                    />
-                    {errors.role && (
-                      <span className="text-red-500">{errors.role.message}</span>
-                    )}
-                  </div>
+                  <input
+                    type="text"
+                    id="role_description"
+                    className="form-input"
+                    placeholder="Enter your role description"
+                    pattern="[A-Za-z ]+"
+                    title="Only letters and spaces allowed"
+                    {...register('role_description', {
+                      required: 'Role description is required.',
+                    })}
+                  />
+                  {errors.role_description && (
+                    <span className="text-red-500">{errors.role_description.message}</span>
+                  )}
                 </div>
-
-                {!userData && (
-                  <div className="col-span-12 md:col-span-6 xl:col-span-6">
-                    <label htmlFor="password" className="form-label">
-                      Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="password"
-                      className="form-input"
-                      placeholder="Enter your password"
-                      pattern="[A-Za-z ]+"
-                      title="Only letters and spaces allowed"
-                      {...register('password', {
-                        required: 'Password is required.',
-                      })}
-                    />
-                    {errors.password && (
-                      <span className="text-red-500">{errors.password.message}</span>
-                    )}
-                  </div>
-                )}
 
                 <div className="col-span-12">
                   <div className="flex items-center justify-end gap-2">
@@ -263,4 +236,4 @@ const UserCreate = () => {
   )
 }
 
-export default UserCreate
+export default RoleCreate

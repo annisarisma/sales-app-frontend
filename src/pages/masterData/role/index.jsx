@@ -11,13 +11,11 @@ import {
 } from '@src/components/CustomComponents/Dropdown/Dropdown'
 import TableContainer from '@src/components/CustomComponents/Table/Table'
 import {
+  setEditMode,
   destroyUserSelected,
   destroyUser,
-  getUserListData,
-  setCurrentUserList,
-  setEditModeUserList,
-  setProductListStatus,
-} from '@src/slices/masterData/users/thunk'
+  getRole,
+} from '@src/slices/masterData/roles/thunk'
 import { Download, Filter, LayoutGrid, Plus, Search, Trash } from 'lucide-react'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
@@ -38,7 +36,7 @@ const ProductOptions = [
 const RoleList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { userList, userById } = useSelector((state) => state.RoleList)
+  const { roleList, roleById } = useSelector((state) => state.RoleList)
   
   const [deletedRecord, setDeletedRecord] = useState(null)
   const [deletedSelectedRecord, setDeletedSelectedData] = useState([])
@@ -66,34 +64,37 @@ const RoleList = () => {
   const [priceRange, setPriceRange] = useState([0, 100000])
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
+  
+  // set tittle
   useEffect(() => {
     document.title =
-      'Products User List | Domiex - React JS Admin & Dashboard Template'
+      'Products Role List | Domiex - React JS Admin & Dashboard Template'
   }, [])
 
+  // set data
   useEffect(() => {
-    if (!userList) {
-      dispatch(getUserListData())
+    if (!roleList) {
+      dispatch(getRole())
     } else {
-      console.log('isi user list:', userList);
-      console.log('isi user by id:', userById);
-      setAllUserList(userList)
+      console.log('isi user list:', roleList);
+      console.log('isi user by id:', roleById);
+      setAllUserList(roleList)
       console.log('isi all user list:', allUserList);
     }
-  }, [userList, dispatch])
+  }, [roleList, dispatch])
 
   // handle create record
-  const handleCreateUser = () => {
-    dispatch(setEditModeUserList(false))
-    localStorage.setItem('previousPage', '/master-data/user')
-    navigate('/master-data/user/create-user')
+  const handleCreate = () => {
+    dispatch(setEditMode(false))
+    localStorage.setItem('previousPage', '/master-data/role')
+    navigate('/master-data/role/create-role')
   }
 
   // handle update record
   const handleUpdateRecord = useCallback(
     (user) => {
-      dispatch(setEditModeUserList(true))
-      navigate(`/master-data/user/update-user/${user.usr_id}`)
+      dispatch(setEditMode(true))
+      navigate(`/master-data/role/update-role/${user.usr_id}`)
     },
     [dispatch, navigate]
   )
@@ -149,13 +150,6 @@ const RoleList = () => {
 
 
 
-  const handleChangeStatusProduct = useCallback(
-    (user) => {
-      dispatch(setProductListStatus(user))
-    },
-    [dispatch]
-  )
-
   // status color
   const getStatusClass = (status) => {
     switch (status) {
@@ -178,14 +172,7 @@ const RoleList = () => {
     setSelectAll((prev) => !prev)
   }, [selectAll, allUserList])
 
-  // overview
-  const handleOverviewProduct = useCallback(
-    (user) => {
-      dispatch(setCurrentUserList(user))
-      navigate('/apps/ecommerce/products/overview')
-    },
-    [dispatch, navigate]
-  )
+
   // handle select user
   const handleSelectProduct = (selectedOption) => {
     setSelectedProductOption(selectedOption)
@@ -215,7 +202,7 @@ const RoleList = () => {
         ),
       },
       {
-        header: 'User ID',
+        header: 'Role ID',
         accessorKey: 'rowNumber',
         enableSorting: false,
         cell: ({ row }) => row.index + 1,
@@ -282,9 +269,7 @@ const RoleList = () => {
     ],
     [
       deletedSelectedRecord,
-      handleChangeStatusProduct,
       handleUpdateRecord,
-      handleOverviewProduct,
       handleSelectAll,
       selectAll,
     ]
@@ -351,7 +336,7 @@ const RoleList = () => {
   }
 
   const exportTable = () => {
-    if (!userList || userList.length === 0) return
+    if (!roleList || roleList.length === 0) return
 
     // Prepare CSV headers based on ProductListItem interface
     const headers = [
@@ -382,7 +367,7 @@ const RoleList = () => {
     ]
 
     let csvContent = headers.join(',') + '\n'
-    userList.forEach((user) => {
+    roleList.forEach((user) => {
       const row = headers.map((header) => {
         const value = user[header]
         if (Array.isArray(value)) {
@@ -408,16 +393,16 @@ const RoleList = () => {
 
   return (
     <React.Fragment>
-      <BreadCrumb subTitle="Transactions" title="User" />
+      <BreadCrumb subTitle="Transactions" title="Role" />
       {/* header */}
       <div className="card">
         {/* card header  */}
         <div className="card-header">
           <div className="flex flex-wrap items-center gap-5">
             <div className="grow">
-              <h6 className="mb-1 card-title">User</h6>
+              <h6 className="mb-1 card-title">Role</h6>
               <p className="text-gray-500 dark:text-dark-500">
-                Track your user's progress to boost your stocks.
+                Track your role's progress to boost your stocks.
               </p>
             </div>
             <div className="flex flex-wrap gap-2 shrink-0">
@@ -429,10 +414,10 @@ const RoleList = () => {
                 className="btn btn-primary"
                 onClick={(e) => {
                   e.preventDefault()
-                  handleCreateUser()
+                  handleCreate()
                 }}>
                 <Plus className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
-                Add User
+                Add Role
               </button>
               <Link
                 to="/apps/ecommerce/products/grid"

@@ -2,6 +2,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import userListReducer from './masterData/users/reducer'
+import roleListReducer from './masterData/users/reducer'
 
 import calendarReducer from './calendar/reducer'
 import contactChatReducer from './chat/contact/reducer'
@@ -47,6 +48,10 @@ import teacherListReducers from './school/teachers/reducer'
 // Combine your reducers
 const rootReducer = combineReducers({
   UserList: userListReducer,
+  RoleList: roleListReducer,
+
+
+
   Layout: layoutReducer,
   Contact: contactReducer,
   Deal: dealReducer,

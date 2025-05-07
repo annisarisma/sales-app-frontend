@@ -269,7 +269,8 @@ import UserList from '@src/pages/masterData/user/index-user'
 import UserCreate from '@src/pages/masterData/user/form-user'
 
 // Role
-import RoleList from '@src/pages/masterData/role/index-user'
+import RoleList from '@src/pages/masterData/role/index'
+import RoleCreate from '@src/pages/masterData/role/form'
 
 const routes = [
   //dashboards
@@ -302,10 +303,10 @@ const routes = [
   { path: '/master-data/user/create-user', component: <UserCreate /> },
   { path: '/master-data/user/update-user/:id', component: <UserCreate /> },
   
-  // User
+  // Role
   { path: '/master-data/role', component: <RoleList /> },
-  { path: '/master-data/role/create-role', component: <UserCreate /> },
-  { path: '/master-data/role/update-role/:id', component: <UserCreate /> },
+  { path: '/master-data/role/create-role', component: <RoleCreate /> },
+  { path: '/master-data/role/update-role/:id', component: <RoleCreate /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },

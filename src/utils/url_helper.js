@@ -4,6 +4,28 @@ const apiUrl = (endpoint) => endpoint
 // User API
 export const REACT_APP_USER_API = apiUrl('/api/users')
 
+// Role API
+export const REACT_APP_ROLE_API = apiUrl('/api/roles')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // CUSTOMER APIS
 export const REACT_APP_CUSTOMER = apiUrl('/api/customers')
 

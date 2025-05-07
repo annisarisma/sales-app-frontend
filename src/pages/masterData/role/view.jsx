@@ -21,7 +21,7 @@ import { Toaster } from 'react-hot-toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import AddEditReview from '../../../apps/ecommerce/manageReviews/addEditReview'
+import AddEditReview from '../../apps/ecommerce/manageReviews/addEditReview'
 
 const ProductOverview = () => {
   const dispatch = useDispatch()
