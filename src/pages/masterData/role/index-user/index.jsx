@@ -35,10 +35,10 @@ const ProductOptions = [
   { label: 'Accessories', value: 'Accessories' },
 ]
 
-const UserList = () => {
+const RoleList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { userList, userById } = useSelector((state) => state.UserList)
+  const { userList, userById } = useSelector((state) => state.RoleList)
   
   const [deletedRecord, setDeletedRecord] = useState(null)
   const [deletedSelectedRecord, setDeletedSelectedData] = useState([])
@@ -604,4 +604,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default RoleList

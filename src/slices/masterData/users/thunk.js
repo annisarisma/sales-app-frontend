@@ -5,9 +5,7 @@ import UpdateToast from '@src/components/CustomComponents/Toast/UpdateToast'
 import api from '@src/utils/axios_api'
 import {
   addLocalStorageRecord,
-  createLocalStorage,
   deleteLocalStorageRecord,
-  getLocalStorage,
   updateLocalStorageRecord,
 } from '@src/utils/crud_functions'
 import { REACT_APP_USER_API } from '@src/utils/url_helper'
@@ -15,11 +13,13 @@ import { REACT_APP_USER_API } from '@src/utils/url_helper'
 import {
   addProductList,
   changeStatusProductList,
-  deleteProductList,
+  destroyUserSelectedSuccess,
+  destroyUserSuccess,
   editProductList,
   getUserList,
   getUserByIdData,
   addUser,
+  updateUserSuccess,
   setCurrentEditMode,
   setCurrentUser,
 } from './reducer'
@@ -59,7 +59,7 @@ export const getUserById = (id) => async (dispatch) => {
   }
 }
 
-// add new patients
+// create user
 export const addUserData = (newRecord) => async (dispatch) => {
   try {
     const response = await api.post(
@@ -69,7 +69,6 @@ export const addUserData = (newRecord) => async (dispatch) => {
     )
     const { message } = response
     AddToast(message || 'User record added successfully')
-    // addLocalStorageRecord('d-hospital-patients-list', newRecord)
     dispatch(addUser(newRecord))
   } catch (error) {
     const errorMessage =
@@ -81,21 +80,65 @@ export const addUserData = (newRecord) => async (dispatch) => {
   }
 }
 
-// add new patients
-export const updateUser = (record, id) => async (dispatch) => {
+// update user
+export const updateUser = (record) => async (dispatch) => {
   try {
-    const response = await api.put(`${USER_API}`,record,'User')
-    const { message } = response
+    console.log(record);
+    const response = await api.put(`${USER_API}`, record, 'User')
+    
+    const { message } = response;
     AddToast(message || 'User record added successfully')
-    // addLocalStorageRecord('d-hospital-patients-list', record)
-    dispatch(addUser(record))
+     
+    dispatch(updateUserSuccess(record))
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || error.message || 'User addition failed.'
+    ErrorToast(errorMessage)
+    
+    console.error('Error in patients adding record:', error)
+  }
+}
+
+// destroy user
+export const destroyUser = (reviews) => async (dispatch) => {
+  try {
+    console.log('thunk reviews: ', reviews);
+    const deletePromises = reviews.map(async (usrId) => {
+      const response = await api.delete(USER_API, usrId, 'User')
+      const { message } = response
+      console.log('thunk message:', message);
+      DeleteToast(message || 'User deleted successfully')
+      return usrId
+    })
+
+    const deletedUser = await Promise.all(deletePromises)
+    dispatch(destroyUserSuccess(deletedUser))
+  } catch (error) {
+    console.log('masuk catch: ', error);
+    const errorMessage = error.response?.data?.message || error.message || 'User record deletion failed.'
+    ErrorToast(errorMessage)
+    console.error('Error in deleting products: ', error)
+  }
+}
+
+// destroy user selected
+export const destroyUserSelected = (reviews) => async (dispatch) => {
+  try {
+    const deletePromises = reviews.map(async (usrId) => {
+      const response = await api.delete(USER_API, usrId, 'User')
+      const { message } = response
+      DeleteToast(message || 'User deleted successfully')
+      return usrId
+    })
+
+    const deletedUser = await Promise.all(deletePromises)
+    dispatch(destroyUserSelectedSuccess(deletedUser))
   } catch (error) {
     const errorMessage =
       error.response?.data?.message ||
       error.message ||
-      'User addition failed.'
+      'User record deletion failed.'
     ErrorToast(errorMessage)
-    console.error('Error in patients adding record:', error)
+    console.error('Error in deleting products: ', error)
   }
 }
 

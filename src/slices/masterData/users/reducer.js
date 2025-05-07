@@ -13,7 +13,7 @@ const ListSlice = createSlice({
   name: 'product_list',
   initialState,
   reducers: {
-    // get product list data
+    // get user
     getUserList(state, action) {
       state.userList = action.payload
     },
@@ -21,6 +21,38 @@ const ListSlice = createSlice({
     // get user by id
     getUserByIdData(state, action) {
       state.userById = action.payload
+    },
+
+    // update user
+    updateUserSuccess(state, action) {
+      const updatedUser = action.payload
+      if (state.userList !== null) {
+        const existingUser = state.userList.findIndex(
+          (userItem) => userItem.usr_id === updatedUser.usrId
+        )
+        if (existingUser !== -1) {
+          state.userList[existingUser] = updatedUser
+          state.currentUser = updatedUser
+        }
+      }
+    },
+
+    // destroy user
+    destroyUserSuccess(state, action) {
+      if (state.userList !== null) {
+        state.userList = state.userList.filter(
+          (item) => !action.payload.includes(item._id)
+        )
+      }
+    },
+
+    // destroy user selected
+    destroyUserSelectedSuccess(state, action) {
+      if (state.userList !== null) {
+        state.userList = state.userList.filter(
+          (item) => !action.payload.includes(item.usr_id)
+        )
+      }
     },
 
 
@@ -119,13 +151,15 @@ const ListSlice = createSlice({
 
 export const {
   getUserList,
+  destroyUserSelectedSuccess,
   getUserByIdData,
   addUser,
+  updateUserSuccess,
   setCurrentUser,
   changeStatusProductList,
   setCurrentEditMode,
   addProductList,
   editProductList,
-  deleteProductList,
+  destroyUserSuccess,
 } = ListSlice.actions
 export default ListSlice.reducer

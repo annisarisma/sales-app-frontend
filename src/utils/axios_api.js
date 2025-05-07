@@ -56,70 +56,49 @@ api.post = async (api, newRecord, field) => {
 }
 
 api.put = async (api, updatedRecord, field) => {
-  const isApi = import.meta.env.VITE_REACT_APP_IS_API_ACTIVE === 'true'
-
-  if (isApi) {
-    try {
-      // Include the ID of the record in the URL
-      const response = await axios.put(
-        `${api}/${updatedRecord.id}`,
-        updatedRecord,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-
-      if (response.status === 200 || response.status === 201) {
-        return response.data
-      } else {
-        throw new Error(response.data?.message || 'Failed to update record!')
+  try {
+    const response = await axios.put(
+      `${api}/${updatedRecord.usrId}`,
+      updatedRecord,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || 'Internal Server Error!'
-      throw new Error(errorMessage)
+    )
+
+    if (response.status === 200 || response.status === 201) {
+      return response.data
+    } else {
+      throw new Error(response.data?.message || 'Failed to update record!')
     }
-  } else {
-    // Simulate update locally when API is inactive
-    return Promise.resolve({
-      data: updatedRecord,
-      message: `${field} update successfully`,
-    })
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || 'Internal Server Error!'
+    throw new Error(errorMessage)
   }
 }
 
 api.delete = async (api, id, field) => {
-  const isApi = import.meta.env.VITE_REACT_APP_IS_API_ACTIVE === 'true'
-
-  if (isApi) {
-    try {
-      // Pass the id as part of the URL
-      const response = await axios.delete(`${api}/${id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      // Check if the delete was successful
-      if (response.status === 200) {
-        return response.data // Return the API response data
-      } else {
-        throw new Error(response.data?.message || 'Failed to delete record!')
-      }
-    } catch (error) {
-      // Log and rethrow the error
-      const errorMessage =
-        error.response?.data?.message || 'Internal Server Error!'
-      throw new Error(errorMessage)
-    }
-  } else {
-    // Simulate delete when the API is inactive
-    return Promise.resolve({
-      data: id,
-      message: `${field} delete successful.`,
+  try {
+    // Pass the id as part of the URL
+    const response = await axios.delete(`${api}/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
+
+    // Check if the delete was successful
+    if (response.status === 200) {
+      return response.data // Return the API response data
+    } else {
+      throw new Error(response.data?.message || 'Failed to delete record!')
+    }
+  } catch (error) {
+    // Log and rethrow the error
+    const errorMessage =
+      error.response?.data?.message || 'Internal Server Error!'
+    throw new Error(errorMessage)
   }
 }
 
