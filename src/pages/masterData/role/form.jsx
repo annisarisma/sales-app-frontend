@@ -65,6 +65,7 @@ const RoleCreate = () => {
 
   useEffect(() => {
     if (roleById) {
+      console.log(roleById);
       setValue('username', roleById.username)
       setValue('email', roleById.email)
       setValue('role', roleById.rol_id)

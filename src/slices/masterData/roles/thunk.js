@@ -7,13 +7,13 @@ import { REACT_APP_ROLE_API } from '@src/utils/url_helper'
 
 import {
   getRoleReducer,
+  getRoleByIdReducer,
+  createRoleReducer,
 
   
 
   destroyUserSelectedSuccess,
   destroyUserSuccess,
-  getUserByIdData,
-  createRoleReducer,
   updateUserSuccess,
 } from './reducer'
 
@@ -42,10 +42,10 @@ export const getRole = () => async (dispatch) => {
 }
 
 // get user by id
-export const getUserById = (id) => async (dispatch) => {
+export const getRoleById = (id) => async (dispatch) => {
   try {
     const response = await api.get(`${ROLE_API}/${id}`)
-    dispatch(getUserByIdData(response))
+    dispatch(getRoleByIdReducer(response))
   } catch (error) {
     const errorMessage =
       error.response?.data?.message ||
@@ -141,7 +141,7 @@ export const destroyUserSelected = (reviews) => async (dispatch) => {
 export const setEditMode = (editMode) => async (dispatch) => {
   try {
     const response = { data: editMode }
-    dispatch(setCurrentEditMode(response.data))
+    dispatch(setEditModeReducer(response.data))
     return response.data
   } catch (error) {
     return error

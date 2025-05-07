@@ -11,10 +11,12 @@ import {
 } from '@src/components/CustomComponents/Dropdown/Dropdown'
 import TableContainer from '@src/components/CustomComponents/Table/Table'
 import {
+  getRole,
+  getRoleById,
   setEditMode,
+
   destroyUserSelected,
   destroyUser,
-  getRole,
 } from '@src/slices/masterData/roles/thunk'
 import { Download, Filter, LayoutGrid, Plus, Search, Trash } from 'lucide-react'
 import Slider from 'rc-slider'
@@ -88,9 +90,10 @@ const RoleList = () => {
 
   // handle update record
   const handleUpdateRecord = useCallback(
-    (user) => {
+    (role) => {
       dispatch(setEditMode(true))
-      navigate(`/master-data/role/update-role/${user.rol_id}`)
+      dispatch(getRoleById(role))
+      navigate(`/master-data/role/update-role/${role.rol_id}`)
     },
     [dispatch, navigate]
   )

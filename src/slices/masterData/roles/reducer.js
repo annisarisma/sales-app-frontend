@@ -12,13 +12,13 @@ const ListSlice = createSlice({
   name: 'product_list',
   initialState,
   reducers: {
-    // get user
+    // get
     getRoleReducer(state, action) {
       state.roleList = action.payload
     },
 
     // get user by id
-    getUserByIdData(state, action) {
+    getRoleByIdReducer(state, action) {
       state.roleById = action.payload
     },
 
@@ -63,22 +63,27 @@ const ListSlice = createSlice({
         )
       }
     },
+
+    // set edit mode
+    setEditModeReducer(state, action) {
+      state.editMode = action.payload
+    },
   },
 })
 
 export const {
   getRoleReducer,
+  getRoleByIdReducer,
   createRoleReducer,
+  setEditModeReducer,
 
 
 
 
   destroyUserSelectedSuccess,
-  getUserByIdData,
   updateUserSuccess,
   setCurrentUser,
   changeStatusProductList,
-  setCurrentEditMode,
   addProductList,
   editProductList,
   destroyUserSuccess,
