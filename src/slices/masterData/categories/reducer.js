@@ -37,7 +37,7 @@ const ListSlice = createSlice({
       const updatedCategory = action.payload
       if (state.categoryList !== null) {
         const existingUser = state.categoryList.findIndex(
-          (categoryItem) => categoryItem.cat_id === updatedCategory._id
+          (categoryItem) => categoryItem.cat_id === updatedCategory.cat_id
         )
         if (existingUser !== -1) {
           state.categoryList[existingUser] = updatedCategory

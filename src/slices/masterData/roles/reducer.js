@@ -37,7 +37,7 @@ const ListSlice = createSlice({
       const updatedRole = action.payload
       if (state.roleList !== null) {
         const existingUser = state.roleList.findIndex(
-          (roleItem) => roleItem.rol_id === updatedRole._id
+          (roleItem) => roleItem.rol_id === updatedRole.rol_id
         )
         if (existingUser !== -1) {
           state.roleList[existingUser] = updatedRole

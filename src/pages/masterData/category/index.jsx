@@ -25,15 +25,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import Select from 'react-select'
 
-const ProductOptions = [
-  { label: 'All', value: 'All' },
-  { label: 'Watch', value: 'Watch' },
-  { label: 'Footwear', value: 'Footwear' },
-  { label: 'Fashion', value: 'Fashion' },
-  { label: 'Bags', value: 'Bags' },
-  { label: 'Accessories', value: 'Accessories' },
-]
-
 const CategoryList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -85,8 +76,8 @@ const CategoryList = () => {
   const handleUpdateRecord = useCallback(
     (category) => {
       dispatch(setEditMode(true))
-      dispatch(getCategoryById(category.rol_id))
-      navigate(`/master-data/category/update-category/${category.rol_id}`)
+      dispatch(getCategoryById(category.cat_id))
+      navigate(`/master-data/category/update-category/${category.cat_id}`)
     },
     [dispatch, navigate]
   )
@@ -125,7 +116,7 @@ const CategoryList = () => {
     if (selectAll) {
       setDeletedSelectedData([])
     } else {
-      setDeletedSelectedData(allCategoryList.map((order) => order.rol_id))
+      setDeletedSelectedData(allCategoryList.map((order) => order.cat_id))
     }
     setSelectAll((prev) => !prev)
   }, [selectAll, allCategoryList])
@@ -148,14 +139,14 @@ const CategoryList = () => {
             onChange={handleSelectAll}
           />
         ),
-        accessorKey: 'rol_id',
+        accessorKey: 'cat_id',
         enableSorting: false,
         cell: ({ row }) => (
           <input
             className="input-check input-check-primary"
             type="checkbox"
-            checked={deletedSelectedRecord.includes(row.original.rol_id)}
-            onChange={() => handleSelectRecord(row.original.rol_id)}
+            checked={deletedSelectedRecord.includes(row.original.cat_id)}
+            onChange={() => handleSelectRecord(row.original.cat_id)}
           />
         ),
       },
@@ -172,10 +163,6 @@ const CategoryList = () => {
       {
         header: 'Category Name',
         accessorKey: 'category_name',
-      },
-      {
-        header: 'Category Description',
-        accessorKey: 'category_description',
       },
       {
         header: 'Action',
@@ -214,7 +201,7 @@ const CategoryList = () => {
                   className="dropdown-item"
                   onClick={(e) => {
                     e.preventDefault()
-                    handleDestroyRecord(value.row.original.rol_id)
+                    handleDestroyRecord(value.row.original.cat_id)
                   }}>
                   <i className="align-middle ltr:mr-2 rtl:ml-2 ri-delete-bin-line"></i>{' '}
                   <span>Delete</span>
@@ -376,11 +363,6 @@ const CategoryList = () => {
                 <Plus className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
                 Add Category
               </button>
-              <Link
-                to="/apps/ecommerce/products/grid"
-                className="btn btn-purple btn-icon">
-                <LayoutGrid className="size-5" />
-              </Link>
             </div>
           </div>
         </div>
@@ -411,96 +393,6 @@ const CategoryList = () => {
                     <Trash className="inline-block size-4" />
                   </button>
                 )}
-                <div id="sampleSelect" className="grow">
-                  <Select
-                    classNamePrefix="select"
-                    options={ProductOptions}
-                    value={selectedProductOption}
-                    onChange={handleSelectProduct}
-                    placeholder="Sorting by class"
-                    isClearable={true}
-                  />
-                </div>
-                {/* filter */}
-                <Dropdown
-                  position="right"
-                  trigger="click"
-                  dropdownClassName="dropdown"
-                  closeOnOutsideClick={false}>
-                  <DropdownButton colorClass="btn btn-sub-gray">
-                    <Filter className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
-                    Filters
-                  </DropdownButton>
-                  <DropdownMenu menuClass="!w-64 p-3">
-                    <h6 className="mb-4">Filter Options</h6>
-
-                    <form onSubmit={(e) => e.preventDefault()}>
-                      <h6 className="mb-2 text-sm">Status</h6>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="input-check-group">
-                          <input
-                            id="publishedCheckboxFilter"
-                            className="input-check input-check-primary"
-                            type="checkbox"
-                            value="Published"
-                            checked={isPublishedFilter}
-                            onChange={handlePublishedFilterChange}
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                          <label
-                            htmlFor="publishedCheckboxFilter"
-                            className="input-check-label">
-                            Published
-                          </label>
-                        </div>
-                        <div className="input-check-group">
-                          <input
-                            id="inactiveCheckboxFilter"
-                            className="input-check input-check-primary"
-                            type="checkbox"
-                            value="Inactive"
-                            checked={isInactiveFilter}
-                            onChange={handleInactiveFilterChange}
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                          <label
-                            htmlFor="inactiveCheckboxFilter"
-                            className="input-check-label">
-                            Inactive
-                          </label>
-                        </div>
-                        <div className="col-span-2">
-                          <label className="mb-3 form-label">Price Range</label>
-                          <div>
-                            <Slider
-                              range
-                              min={0}
-                              max={100000}
-                              defaultValue={priceRange}
-                              onChange={handleSliderChange}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-end gap-2 pt-1 mt-5">
-                        <button
-                          type="reset"
-                          className="btn-sm btn btn-sub-gray"
-                          onClick={handleResetFilters}>
-                          Reset
-                        </button>
-                        <button
-                          type="submit"
-                          className="btn-sm btn btn-primary"
-                          onClick={handleApplyFilters}>
-                          Apply
-                        </button>
-                      </div>
-                    </form>
-                  </DropdownMenu>
-                </Dropdown>
               </div>
             </div>
           </div>

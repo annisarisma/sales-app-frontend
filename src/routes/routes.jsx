@@ -260,6 +260,7 @@ import UnitList from '@src/pages/masterData/unit/list'
 
 // Category
 import CategoryList from '@src/pages/masterData/category/index'
+import CategoryCreate from '@src/pages/masterData/category/form'
 
 // Cost Of Goods Sold
 import CostOfGoodsSoldList from '@src/pages/masterData/costOfGoodsSold/list'
@@ -299,6 +300,8 @@ const routes = [
   
   // Category
   { path: '/master-data/category', component: <CategoryList /> },
+  { path: '/master-data/category/create-category', component: <CategoryCreate /> },
+  { path: '/master-data/category/update-category/:id', component: <CategoryCreate /> },
   
   // User
   { path: '/master-data/user', component: <UserList /> },

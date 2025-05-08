@@ -31,7 +31,6 @@ const CategoryCreate = () => {
     reset({
       category_code: '',
       category_name: '',
-      category_description: '',
     })
     clearErrors()
   }, [reset, clearErrors, categoryList])
@@ -65,10 +64,9 @@ const CategoryCreate = () => {
 
   // set value
   useEffect(() => {
-    if (categoryById) {
+    if (categoryById && editMode) {
       setValue('category_code', categoryById.category_code)
       setValue('category_name', categoryById.category_name)
-      setValue('category_description', categoryById.category_description)
     } else {
       resetForm()
       clearErrors()
@@ -135,27 +133,6 @@ const CategoryCreate = () => {
                   />
                   {errors.category_name && (
                     <span className="text-red-500">{errors.category_name.message}</span>
-                  )}
-                </div>
-                
-                {/* Category Description */}
-                <div className="col-span-12 md:col-span-6 xl:col-span-12">
-                  <label htmlFor="category_description" className="form-label">
-                    Category Description <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="category_description"
-                    className="form-input"
-                    placeholder="Enter your category description"
-                    pattern="[A-Za-z ]+"
-                    title="Only letters and spaces allowed"
-                    {...register('category_description', {
-                      required: 'Category description is required.',
-                    })}
-                  />
-                  {errors.category_description && (
-                    <span className="text-red-500">{errors.category_description.message}</span>
                   )}
                 </div>
 

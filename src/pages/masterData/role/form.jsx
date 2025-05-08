@@ -65,7 +65,7 @@ const RoleCreate = () => {
 
   // set value
   useEffect(() => {
-    if (roleById) {
+    if (roleById && editMode) {
       setValue('role_code', roleById.role_code)
       setValue('role_name', roleById.role_name)
       setValue('role_description', roleById.role_description)
