@@ -11,7 +11,6 @@ import {
 } from '@src/components/CustomComponents/Dropdown/Dropdown'
 import TableContainer from '@src/components/CustomComponents/Table/Table'
 import {
-  getCategory,
   getCategoryById,
   setEditMode,
   destroyCategory,

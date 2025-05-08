@@ -3,12 +3,12 @@ const apiUrl = (endpoint) => endpoint
 
 // User API
 export const REACT_APP_USER_API = apiUrl('/api/users')
-
 // Role API
 export const REACT_APP_ROLE_API = apiUrl('/api/roles')
-
 // Category API
 export const REACT_APP_CATEGORY_API = apiUrl('/api/categories')
+// Product API
+export const REACT_APP_PRODUCT_API = apiUrl('/api/products')
 
 
 

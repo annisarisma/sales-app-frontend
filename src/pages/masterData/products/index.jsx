@@ -11,142 +11,119 @@ import {
 } from '@src/components/CustomComponents/Dropdown/Dropdown'
 import TableContainer from '@src/components/CustomComponents/Table/Table'
 import {
-  deleteProductListData,
-  getProductListData,
-  setCurrentProductList,
-  setEditModeProductList,
-  setProductListStatus,
-} from '@src/slices/ecommerce/products/list/thunk'
-import { Download, Filter, LayoutGrid, Plus, Search, Trash } from 'lucide-react'
-import Slider from 'rc-slider'
+  getProductById,
+  setEditMode,
+  destroyProduct,
+  destroyProductSelected,
+} from '@src/slices/masterData/products/thunk'
+import { Download, Plus, Search, Trash } from 'lucide-react'
 import 'rc-slider/assets/index.css'
 import { Toaster } from 'react-hot-toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import Select from 'react-select'
-
-const ProductOptions = [
-  { label: 'All', value: 'All' },
-  { label: 'Watch', value: 'Watch' },
-  { label: 'Footwear', value: 'Footwear' },
-  { label: 'Fashion', value: 'Fashion' },
-  { label: 'Bags', value: 'Bags' },
-  { label: 'Accessories', value: 'Accessories' },
-]
 
 const ProductList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  
+  // data
   const { productList } = useSelector((state) => state.ProductList)
+  const [ allProductList, setAllProductList ] = React.useState([])
+
+  // crud
+  const [deletedRecord, setDeletedRecord] = useState(null)
+  const [deletedSelectedRecord, setDeletedSelectedData] = useState([])
+
+  // filter
+  const [appliedFilters, setAppliedFilters] = useState({isPublished: false, isInactive: false})
+
+  // app setting
   const { layoutDirection } = useSelector((state) => state.Layout)
-  const [deletedListData, setDeletedListData] = useState([])
   const [selectAll, setSelectAll] = useState(false)
-  const [allProductList, setAllProductList] = React.useState([])
   const [selectedProductOption, setSelectedProductOption] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [deletedRecord, setDeletedRecord] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [isPublishedFilter, setIsPublishedFilter] = useState(false)
   const [isInactiveFilter, setIsInactiveFilter] = useState(false)
-  const [appliedFilters, setAppliedFilters] = useState({
-    isPublished: false,
-    isInactive: false,
-  })
   const [priceRange, setPriceRange] = useState([0, 100000])
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
+
+  // set tittle
   useEffect(() => {
     document.title =
-      'Products Products | Domiex - React JS Admin & Dashboard Template'
+      'Products Product List | Domiex - React JS Admin & Dashboard Template'
   }, [])
 
+  // set data
   useEffect(() => {
-    if (!productList) {
-      dispatch(getProductListData())
-    } else {
+    if (productList) {
       setAllProductList(productList)
     }
   }, [productList, dispatch])
 
-  const handleChangeStatusProduct = useCallback(
-    (product) => {
-      dispatch(setProductListStatus(product))
-    },
-    [dispatch]
-  )
+  // handle create record
+  const handleCreate = () => {
+    dispatch(setEditMode(false))
+    localStorage.setItem('previousPage', '/master-data/product')
+    navigate('/master-data/product/create-product')
+  }
 
-  const handleEditProduct = useCallback(
+  // handle update record
+  const handleUpdateRecord = useCallback(
     (product) => {
-      dispatch(setEditModeProductList(true))
-      dispatch(setCurrentProductList(product))
-      navigate('/apps/ecommerce/products/create-products')
+      dispatch(setEditMode(true))
+      dispatch(getProductById(product.prd_id))
+      navigate(`/master-data/product/update-product/${product.prd_id}`)
     },
     [dispatch, navigate]
   )
 
-  const handleAddProduct = () => {
-    dispatch(setEditModeProductList(false))
-    localStorage.setItem('previousPage', '/apps/ecommerce/products/list')
-    navigate('/apps/ecommerce/products/create-products')
+  // handle destroy record
+  const handleDestroyRecord = (rolId) => {
+    setIsModalOpen(true)
+    setDeletedRecord([rolId])
   }
 
-  // status color
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Published':
-        return 'badge badge-green'
-      case 'Inactive':
-        return 'badge badge-gray'
-      default:
-        return 'badge'
-    }
-  }
-  // set multiple delete records
-  const handleSelectRecord = (_id) => {
-    setDeletedListData((prev) =>
-      prev.includes(_id) ? prev.filter((item) => item !== _id) : [...prev, _id]
-    )
-  }
-  // select all or unselect all
-  const handleSelectAll = useCallback(() => {
-    if (selectAll) {
-      setDeletedListData([])
-    } else {
-      setDeletedListData(allProductList.map((order) => order._id))
-    }
-    setSelectAll((prev) => !prev)
-  }, [selectAll, allProductList])
-  const handleDeleteRecord = (_id) => {
-    setIsModalOpen(true)
-    setDeletedRecord([_id])
-  }
-  // delete multiple records
-  const handleRemoveSelectedRecords = () => {
-    dispatch(deleteProductListData(deletedListData))
-    setDeletedListData([])
+  // handle destroy record selected
+  const handleDestroyRecordSelected = () => {
+    dispatch(destroyProductSelected(deletedSelectedRecord))
+    setDeletedSelectedData([])
     setSelectAll(false)
   }
-  // set customer delete record
-  const setDeleteRecord = () => {
+
+  // destroy record
+  const destroyRecord = () => {
     if (deletedRecord && isModalOpen) {
-      dispatch(deleteProductListData(deletedRecord))
+      dispatch(destroyProduct(deletedRecord))
       setIsModalOpen(false)
       setDeletedRecord(null)
     }
   }
-  // overview
-  const handleOverviewProduct = useCallback(
-    (product) => {
-      dispatch(setCurrentProductList(product))
-      navigate('/apps/ecommerce/products/overview')
-    },
-    [dispatch, navigate]
-  )
-  // handle select product
+
+  // handle checkboxes
+  const handleSelectRecord = (rolId) => {
+    setDeletedSelectedData((prev) =>
+      prev.includes(rolId) ? prev.filter((item) => item !== rolId) : [...prev, rolId]
+    )
+  }
+
+  // handle all select
+  const handleSelectAll = useCallback(() => {
+    if (selectAll) {
+      setDeletedSelectedData([])
+    } else {
+      setDeletedSelectedData(allProductList.map((order) => order.prd_id))
+    }
+    setSelectAll((prev) => !prev)
+  }, [selectAll, allProductList])
+
+  // handle select
   const handleSelectProduct = (selectedOption) => {
     setSelectedProductOption(selectedOption)
   }
-  // table header
+
+  // table
   const columns = useMemo(
     () => [
       {
@@ -159,75 +136,34 @@ const ProductList = () => {
             onChange={handleSelectAll}
           />
         ),
-        accessorKey: 'id',
+        accessorKey: 'prd_id',
         enableSorting: false,
         cell: ({ row }) => (
           <input
             className="input-check input-check-primary"
             type="checkbox"
-            checked={deletedListData.includes(row.original._id)}
-            onChange={() => handleSelectRecord(row.original._id)}
+            checked={deletedSelectedRecord.includes(row.original.prd_id)}
+            onChange={() => handleSelectRecord(row.original.prd_id)}
           />
         ),
       },
       {
         header: 'Product ID',
-        accessorKey: 'productId',
+        accessorKey: 'rowNumber',
+        enableSorting: false,
+        cell: ({ row }) => row.index + 1,
       },
       {
-        header: 'Material Name',
-        accessorKey: 'productName',
-        cell: (value) => {
-          return (
-            <>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center p-1 border border-gray-200 rounded-sm dark:border-dark-800 size-9">
-                  <img
-                    src={value.row.original.image1}
-                    alt="valueImg"
-                    className="rounded"
-                    width={26}
-                    height={26}
-                  />
-                </div>
-                <h6>
-                  <Link to="#"></Link>
-                  {value.row.original.productName}
-                </h6>
-              </div>
-            </>
-          )
-        },
+        header: 'Product Code',
+        accessorKey: 'product_code',
       },
       {
-        header: 'Supplier Name',
-        accessorKey: 'category',
+        header: 'Product Name',
+        accessorKey: 'product_name',
       },
       {
-        header: 'QTY',
-        accessorKey: 'qty',
-      },
-      {
-        header: 'Price',
-        accessorKey: 'price',
-        cell: (value) => <span>${value.getValue()}</span>,
-      },
-      {
-        header: 'Total Price',
-        accessorKey: 'revenue',
-        cell: (value) => (
-          <Link to="#!" className="">
-            {value.getValue()}
-          </Link>
-        ),
-      },
-      {
-        header: 'status',
-        accessorKey: 'status',
-        cell: ({ row }) => {
-          const { status } = row.original
-          return <span className={getStatusClass(status)}>{status}</span>
-        },
+        header: 'Category Name',
+        accessorKey: 'category_name',
       },
       {
         header: 'Action',
@@ -256,7 +192,7 @@ const ProductList = () => {
                 <button
                   className="dropdown-item "
                   onClick={() => {
-                    handleEditProduct(value.row.original)
+                    handleUpdateRecord(value.row.original)
                   }}>
                   <i className="align-middle ltr:mr-2 rtl:ml-2 ri-pencil-line"></i>{' '}
                   <span>Edit</span>
@@ -266,7 +202,7 @@ const ProductList = () => {
                   className="dropdown-item"
                   onClick={(e) => {
                     e.preventDefault()
-                    handleDeleteRecord(value.row.original._id)
+                    handleDestroyRecord(value.row.original.prd_id)
                   }}>
                   <i className="align-middle ltr:mr-2 rtl:ml-2 ri-delete-bin-line"></i>{' '}
                   <span>Delete</span>
@@ -278,43 +214,22 @@ const ProductList = () => {
       },
     ],
     [
-      deletedListData,
-      handleChangeStatusProduct,
-      handleEditProduct,
-      handleOverviewProduct,
+      deletedSelectedRecord,
+      handleUpdateRecord,
       handleSelectAll,
       selectAll,
     ]
   )
 
-  // Filter data based on search term and applied filters
+  // filtered data for table
   const filteredData = useMemo(() => {
     return allProductList.filter((item) => {
+      console.log(item);
       const matchesSearchTerm =
-        item.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchTerm.toLowerCase())
-
-      const matchesPriceRange =
-        item.price >= priceRange[0] && item.price <= priceRange[1]
-
-      const matchesTypeProducts =
-        !selectedProductOption ||
-        selectedProductOption.value === 'All' ||
-        item.category === selectedProductOption.value
-      const matchesPublishedFilter = appliedFilters.isPublished
-        ? item.status === 'Published'
-        : true
-      const matchesInactiveFilter = appliedFilters.isInactive
-        ? item.status === 'Inactive'
-        : true
-
+        item.product_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.product_name.toLowerCase().includes(searchTerm.toLowerCase())
       return (
-        matchesSearchTerm &&
-        matchesTypeProducts &&
-        matchesPublishedFilter &&
-        matchesInactiveFilter &&
-        matchesPriceRange
+        matchesSearchTerm
       )
     })
   }, [
@@ -375,7 +290,7 @@ const ProductList = () => {
       'productId',
       'productName',
       'description',
-      'category',
+      'product',
       'price',
       'discount',
       'count',
@@ -398,9 +313,9 @@ const ProductList = () => {
     ]
 
     let csvContent = headers.join(',') + '\n'
-    productList.forEach((product) => {
+    productList.forEach((user) => {
       const row = headers.map((header) => {
-        const value = product[header]
+        const value = user[header]
         if (Array.isArray(value)) {
           return `"${value.join(',')}"`
         }
@@ -445,16 +360,11 @@ const ProductList = () => {
                 className="btn btn-primary"
                 onClick={(e) => {
                   e.preventDefault()
-                  handleAddProduct()
+                  handleCreate()
                 }}>
                 <Plus className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
                 Add Product
               </button>
-              <Link
-                to="/apps/ecommerce/products/grid"
-                className="btn btn-purple btn-icon">
-                <LayoutGrid className="size-5" />
-              </Link>
             </div>
           </div>
         </div>
@@ -478,103 +388,13 @@ const ProductList = () => {
             </div>
             <div>
               <div className="flex items-center gap-3">
-                {deletedListData.length > 0 && (
+                {deletedSelectedRecord.length > 0 && (
                   <button
                     className="btn btn-red btn-icon"
-                    onClick={handleRemoveSelectedRecords}>
+                    onClick={handleDestroyRecordSelected}>
                     <Trash className="inline-block size-4" />
                   </button>
                 )}
-                <div id="sampleSelect" className="grow">
-                  <Select
-                    classNamePrefix="select"
-                    options={ProductOptions}
-                    value={selectedProductOption}
-                    onChange={handleSelectProduct}
-                    placeholder="Sorting by class"
-                    isClearable={true}
-                  />
-                </div>
-                {/* filter */}
-                <Dropdown
-                  position="right"
-                  trigger="click"
-                  dropdownClassName="dropdown"
-                  closeOnOutsideClick={false}>
-                  <DropdownButton colorClass="btn btn-sub-gray">
-                    <Filter className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
-                    Filters
-                  </DropdownButton>
-                  <DropdownMenu menuClass="!w-64 p-3">
-                    <h6 className="mb-4">Filter Options</h6>
-
-                    <form onSubmit={(e) => e.preventDefault()}>
-                      <h6 className="mb-2 text-sm">Status</h6>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="input-check-group">
-                          <input
-                            id="publishedCheckboxFilter"
-                            className="input-check input-check-primary"
-                            type="checkbox"
-                            value="Published"
-                            checked={isPublishedFilter}
-                            onChange={handlePublishedFilterChange}
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                          <label
-                            htmlFor="publishedCheckboxFilter"
-                            className="input-check-label">
-                            Published
-                          </label>
-                        </div>
-                        <div className="input-check-group">
-                          <input
-                            id="inactiveCheckboxFilter"
-                            className="input-check input-check-primary"
-                            type="checkbox"
-                            value="Inactive"
-                            checked={isInactiveFilter}
-                            onChange={handleInactiveFilterChange}
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                          <label
-                            htmlFor="inactiveCheckboxFilter"
-                            className="input-check-label">
-                            Inactive
-                          </label>
-                        </div>
-                        <div className="col-span-2">
-                          <label className="mb-3 form-label">Price Range</label>
-                          <div>
-                            <Slider
-                              range
-                              min={0}
-                              max={100000}
-                              defaultValue={priceRange}
-                              onChange={handleSliderChange}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-end gap-2 pt-1 mt-5">
-                        <button
-                          type="reset"
-                          className="btn-sm btn btn-sub-gray"
-                          onClick={handleResetFilters}>
-                          Reset
-                        </button>
-                        <button
-                          type="submit"
-                          className="btn-sm btn btn-primary"
-                          onClick={handleApplyFilters}>
-                          Apply
-                        </button>
-                      </div>
-                    </form>
-                  </DropdownMenu>
-                </Dropdown>
               </div>
             </div>
           </div>
@@ -614,7 +434,7 @@ const ProductList = () => {
       <DeleteModal
         show={isModalOpen}
         handleHide={() => setIsModalOpen(false)}
-        deleteModalFunction={setDeleteRecord}
+        deleteModalFunction={destroyRecord}
       />
     </React.Fragment>
   )

@@ -38,6 +38,7 @@ import {
 
 import { getRole } from './slices/masterData/roles/thunk'
 import { getCategory } from './slices/masterData/categories/thunk'
+import { getProduct } from './slices/masterData/products/thunk'
 
 function App() {
   useEffect(() => {
@@ -52,6 +53,7 @@ function App() {
     const dispatch = store.dispatch // Use AppDispatch
     dispatch(getRole())
     dispatch(getCategory())
+    dispatch(getProduct())
 
 
 
@@ -65,7 +67,7 @@ function App() {
     dispatch(getWishList())
     dispatch(getPatientsData())
     dispatch(getStudentListData())
-    dispatch(getProductListData())
+    // dispatch(getProductListData())
     dispatch(
       changeLayoutMode(
         getPreviousStorageData('data-layout-mode') ?? initialState.layoutMode

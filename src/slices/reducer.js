@@ -4,6 +4,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userListReducer from './masterData/users/reducer'
 import roleListReducer from './masterData/roles/reducer'
 import categoryListReducer from './masterData/categories/reducer'
+import productListReducer from './masterData/products/reducer'
 
 import calendarReducer from './calendar/reducer'
 import contactChatReducer from './chat/contact/reducer'
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
   UserList: userListReducer,
   RoleList: roleListReducer,
   CategoryList: categoryListReducer,
+  ProductList: productListReducer,
 
 
 
@@ -62,7 +64,7 @@ const rootReducer = combineReducers({
   EventList: eventReducer,
   ProjectsList: projectsListReducer,
   ProjectsGrid: projectsGridReducer,
-  ProductList: productReducer,
+  // ProductList: productReducer,
   CustomerList: customerListReducer,
   Departments: departmentsReducers,
   ShopCarts: shopCartReducer,

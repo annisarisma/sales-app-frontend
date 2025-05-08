@@ -240,8 +240,21 @@ import PurchaseOrderList from '@src/pages/transactions/purchaseOrders/list'
 // Sales Order
 import SalesOrderList from '@src/pages/transactions/salesOrders/list'
 
+// User
+import UserList from '@src/pages/masterData/user/index-user'
+import UserCreate from '@src/pages/masterData/user/form-user'
+
+// Role
+import RoleList from '@src/pages/masterData/role/index'
+import RoleCreate from '@src/pages/masterData/role/form'
+
+// Category
+import CategoryList from '@src/pages/masterData/category/index'
+import CategoryCreate from '@src/pages/masterData/category/form'
+
 // Products
-import ProductList from '@src/pages/masterData/products/list'
+import ProductList from '@src/pages/masterData/products/index'
+import ProductCreate from '@src/pages/masterData/products/form'
 
 // Material
 import MaterialList from '@src/pages/masterData/materials/list'
@@ -258,20 +271,9 @@ import PaymentMethodList from '@src/pages/masterData/paymentMethod/list'
 // Unit
 import UnitList from '@src/pages/masterData/unit/list'
 
-// Category
-import CategoryList from '@src/pages/masterData/category/index'
-import CategoryCreate from '@src/pages/masterData/category/form'
-
 // Cost Of Goods Sold
 import CostOfGoodsSoldList from '@src/pages/masterData/costOfGoodsSold/list'
 
-// User
-import UserList from '@src/pages/masterData/user/index-user'
-import UserCreate from '@src/pages/masterData/user/form-user'
-
-// Role
-import RoleList from '@src/pages/masterData/role/index'
-import RoleCreate from '@src/pages/masterData/role/form'
 
 const routes = [
   //dashboards
@@ -288,16 +290,7 @@ const routes = [
   // transaction
   { path: '/transaction/purchase-order/list', component: <PurchaseOrderList /> },
   { path: '/transaction/sales-order/list', component: <SalesOrderList /> },
-  
-  // master data
-  { path: '/master-data/product', component: <ProductList /> },
-  { path: '/master-data/material', component: <MaterialList /> },
-  { path: '/master-data/inventory', component: <InventoryList /> },
-  { path: '/master-data/stock', component: <StockList /> },
-  { path: '/master-data/payment-method', component: <PaymentMethodList /> },
-  { path: '/master-data/unit', component: <UnitList /> },
-  { path: '/master-data/cost-of-goods-sold', component: <CostOfGoodsSoldList /> },
-  
+
   // Category
   { path: '/master-data/category', component: <CategoryList /> },
   { path: '/master-data/category/create-category', component: <CategoryCreate /> },
@@ -312,6 +305,20 @@ const routes = [
   { path: '/master-data/role', component: <RoleList /> },
   { path: '/master-data/role/create-role', component: <RoleCreate /> },
   { path: '/master-data/role/update-role/:id', component: <RoleCreate /> },
+
+  // Product
+  { path: '/master-data/product', component: <ProductList /> },
+  { path: '/master-data/product/create-product', component: <ProductCreate /> },
+  { path: '/master-data/product/update-product/:id', component: <ProductCreate /> },
+
+
+
+  { path: '/master-data/material', component: <MaterialList /> },
+  { path: '/master-data/inventory', component: <InventoryList /> },
+  { path: '/master-data/stock', component: <StockList /> },
+  { path: '/master-data/payment-method', component: <PaymentMethodList /> },
+  { path: '/master-data/unit', component: <UnitList /> },
+  { path: '/master-data/cost-of-goods-sold', component: <CostOfGoodsSoldList /> },
 
   //   // apps
   { path: '/apps/chat/default', component: <DefaultChat /> },
