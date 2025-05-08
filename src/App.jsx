@@ -37,6 +37,7 @@ import {
 } from './slices/thunk'
 
 import { getRole } from './slices/masterData/roles/thunk'
+import { getCategory } from './slices/masterData/categories/thunk'
 
 function App() {
   useEffect(() => {
@@ -50,6 +51,7 @@ function App() {
   useEffect(() => {
     const dispatch = store.dispatch // Use AppDispatch
     dispatch(getRole())
+    dispatch(getCategory())
 
 
 

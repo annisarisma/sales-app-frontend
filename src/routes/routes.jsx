@@ -259,7 +259,7 @@ import PaymentMethodList from '@src/pages/masterData/paymentMethod/list'
 import UnitList from '@src/pages/masterData/unit/list'
 
 // Category
-import CategoryList from '@src/pages/masterData/category/list'
+import CategoryList from '@src/pages/masterData/category/index'
 
 // Cost Of Goods Sold
 import CostOfGoodsSoldList from '@src/pages/masterData/costOfGoodsSold/list'
@@ -295,9 +295,11 @@ const routes = [
   { path: '/master-data/stock', component: <StockList /> },
   { path: '/master-data/payment-method', component: <PaymentMethodList /> },
   { path: '/master-data/unit', component: <UnitList /> },
-  { path: '/master-data/category', component: <CategoryList /> },
   { path: '/master-data/cost-of-goods-sold', component: <CostOfGoodsSoldList /> },
-
+  
+  // Category
+  { path: '/master-data/category', component: <CategoryList /> },
+  
   // User
   { path: '/master-data/user', component: <UserList /> },
   { path: '/master-data/user/create-user', component: <UserCreate /> },

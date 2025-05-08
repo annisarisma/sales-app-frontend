@@ -11,12 +11,12 @@ import {
 } from '@src/components/CustomComponents/Dropdown/Dropdown'
 import TableContainer from '@src/components/CustomComponents/Table/Table'
 import {
-  deleteProductListData,
-  getProductListData,
-  setCurrentProductList,
-  setEditModeProductList,
-  setProductListStatus,
-} from '@src/slices/ecommerce/products/list/thunk'
+  getCategory,
+  getCategoryById,
+  setEditMode,
+  destroyCategory,
+  destroyCategorySelected,
+} from '@src/slices/masterData/categories/thunk'
 import { Download, Filter, LayoutGrid, Plus, Search, Trash } from 'lucide-react'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
@@ -37,116 +37,105 @@ const ProductOptions = [
 const CategoryList = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { productList } = useSelector((state) => state.ProductList)
+  
+  // data
+  const { categoryList } = useSelector((state) => state.CategoryList)
+  const [ allCategoryList, setAllCategoryList ] = React.useState([])
+
+  // crud
+  const [deletedRecord, setDeletedRecord] = useState(null)
+  const [deletedSelectedRecord, setDeletedSelectedData] = useState([])
+
+  // filter
+  const [appliedFilters, setAppliedFilters] = useState({isPublished: false, isInactive: false})
+
+  // app setting
   const { layoutDirection } = useSelector((state) => state.Layout)
-  const [deletedListData, setDeletedListData] = useState([])
   const [selectAll, setSelectAll] = useState(false)
-  const [allProductList, setAllProductList] = React.useState([])
   const [selectedProductOption, setSelectedProductOption] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [deletedRecord, setDeletedRecord] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [isPublishedFilter, setIsPublishedFilter] = useState(false)
   const [isInactiveFilter, setIsInactiveFilter] = useState(false)
-  const [appliedFilters, setAppliedFilters] = useState({
-    isPublished: false,
-    isInactive: false,
-  })
   const [priceRange, setPriceRange] = useState([0, 100000])
   const itemsPerPage = 10
   const [currentPage, setCurrentPage] = useState(1)
+
+  // set tittle
   useEffect(() => {
     document.title =
       'Products Category List | Domiex - React JS Admin & Dashboard Template'
   }, [])
 
+  // set data
   useEffect(() => {
-    if (!productList) {
-      dispatch(getProductListData())
-    } else {
-      setAllProductList(productList)
+    if (categoryList) {
+      setAllCategoryList(categoryList)
     }
-  }, [productList, dispatch])
+  }, [categoryList, dispatch])
 
-  const handleChangeStatusProduct = useCallback(
-    (product) => {
-      dispatch(setProductListStatus(product))
-    },
-    [dispatch]
-  )
+  // handle create record
+  const handleCreate = () => {
+    dispatch(setEditMode(false))
+    localStorage.setItem('previousPage', '/master-data/category')
+    navigate('/master-data/category/create-category')
+  }
 
-  const handleEditProduct = useCallback(
-    (product) => {
-      dispatch(setEditModeProductList(true))
-      dispatch(setCurrentProductList(product))
-      navigate('/apps/ecommerce/products/create-products')
+  // handle update record
+  const handleUpdateRecord = useCallback(
+    (category) => {
+      dispatch(setEditMode(true))
+      dispatch(getCategoryById(category.rol_id))
+      navigate(`/master-data/category/update-category/${category.rol_id}`)
     },
     [dispatch, navigate]
   )
 
-  const handleAddProduct = () => {
-    dispatch(setEditModeProductList(false))
-    localStorage.setItem('previousPage', '/apps/ecommerce/products/list')
-    navigate('/apps/ecommerce/products/create-products')
+  // handle destroy record
+  const handleDestroyRecord = (rolId) => {
+    setIsModalOpen(true)
+    setDeletedRecord([rolId])
   }
 
-  // status color
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'Published':
-        return 'badge badge-green'
-      case 'Inactive':
-        return 'badge badge-gray'
-      default:
-        return 'badge'
-    }
-  }
-  // set multiple delete records
-  const handleSelectRecord = (_id) => {
-    setDeletedListData((prev) =>
-      prev.includes(_id) ? prev.filter((item) => item !== _id) : [...prev, _id]
-    )
-  }
-  // select all or unselect all
-  const handleSelectAll = useCallback(() => {
-    if (selectAll) {
-      setDeletedListData([])
-    } else {
-      setDeletedListData(allProductList.map((order) => order._id))
-    }
-    setSelectAll((prev) => !prev)
-  }, [selectAll, allProductList])
-  const handleDeleteRecord = (_id) => {
-    setIsModalOpen(true)
-    setDeletedRecord([_id])
-  }
-  // delete multiple records
-  const handleRemoveSelectedRecords = () => {
-    dispatch(deleteProductListData(deletedListData))
-    setDeletedListData([])
+  // handle destroy record selected
+  const handleDestroyRecordSelected = () => {
+    dispatch(destroyCategorySelected(deletedSelectedRecord))
+    setDeletedSelectedData([])
     setSelectAll(false)
   }
-  // set customer delete record
-  const setDeleteRecord = () => {
+
+  // destroy record
+  const destroyRecord = () => {
     if (deletedRecord && isModalOpen) {
-      dispatch(deleteProductListData(deletedRecord))
+      dispatch(destroyCategory(deletedRecord))
       setIsModalOpen(false)
       setDeletedRecord(null)
     }
   }
-  // overview
-  const handleOverviewProduct = useCallback(
-    (product) => {
-      dispatch(setCurrentProductList(product))
-      navigate('/apps/ecommerce/products/overview')
-    },
-    [dispatch, navigate]
-  )
-  // handle select product
+
+  // handle checkboxes
+  const handleSelectRecord = (rolId) => {
+    setDeletedSelectedData((prev) =>
+      prev.includes(rolId) ? prev.filter((item) => item !== rolId) : [...prev, rolId]
+    )
+  }
+
+  // handle all select
+  const handleSelectAll = useCallback(() => {
+    if (selectAll) {
+      setDeletedSelectedData([])
+    } else {
+      setDeletedSelectedData(allCategoryList.map((order) => order.rol_id))
+    }
+    setSelectAll((prev) => !prev)
+  }, [selectAll, allCategoryList])
+
+  // handle select
   const handleSelectProduct = (selectedOption) => {
     setSelectedProductOption(selectedOption)
   }
-  // table header
+
+  // table
   const columns = useMemo(
     () => [
       {
@@ -159,75 +148,34 @@ const CategoryList = () => {
             onChange={handleSelectAll}
           />
         ),
-        accessorKey: 'id',
+        accessorKey: 'rol_id',
         enableSorting: false,
         cell: ({ row }) => (
           <input
             className="input-check input-check-primary"
             type="checkbox"
-            checked={deletedListData.includes(row.original._id)}
-            onChange={() => handleSelectRecord(row.original._id)}
+            checked={deletedSelectedRecord.includes(row.original.rol_id)}
+            onChange={() => handleSelectRecord(row.original.rol_id)}
           />
         ),
       },
       {
         header: 'Category ID',
-        accessorKey: 'productId',
+        accessorKey: 'rowNumber',
+        enableSorting: false,
+        cell: ({ row }) => row.index + 1,
       },
       {
-        header: 'Material Name',
-        accessorKey: 'productName',
-        cell: (value) => {
-          return (
-            <>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center p-1 border border-gray-200 rounded-sm dark:border-dark-800 size-9">
-                  <img
-                    src={value.row.original.image1}
-                    alt="valueImg"
-                    className="rounded"
-                    width={26}
-                    height={26}
-                  />
-                </div>
-                <h6>
-                  <Link to="#"></Link>
-                  {value.row.original.productName}
-                </h6>
-              </div>
-            </>
-          )
-        },
+        header: 'Category Code',
+        accessorKey: 'category_code',
       },
       {
-        header: 'Supplier Name',
-        accessorKey: 'category',
+        header: 'Category Name',
+        accessorKey: 'category_name',
       },
       {
-        header: 'QTY',
-        accessorKey: 'qty',
-      },
-      {
-        header: 'Price',
-        accessorKey: 'price',
-        cell: (value) => <span>${value.getValue()}</span>,
-      },
-      {
-        header: 'Total Price',
-        accessorKey: 'revenue',
-        cell: (value) => (
-          <Link to="#!" className="">
-            {value.getValue()}
-          </Link>
-        ),
-      },
-      {
-        header: 'status',
-        accessorKey: 'status',
-        cell: ({ row }) => {
-          const { status } = row.original
-          return <span className={getStatusClass(status)}>{status}</span>
-        },
+        header: 'Category Description',
+        accessorKey: 'category_description',
       },
       {
         header: 'Action',
@@ -256,7 +204,7 @@ const CategoryList = () => {
                 <button
                   className="dropdown-item "
                   onClick={() => {
-                    handleEditProduct(value.row.original)
+                    handleUpdateRecord(value.row.original)
                   }}>
                   <i className="align-middle ltr:mr-2 rtl:ml-2 ri-pencil-line"></i>{' '}
                   <span>Edit</span>
@@ -266,7 +214,7 @@ const CategoryList = () => {
                   className="dropdown-item"
                   onClick={(e) => {
                     e.preventDefault()
-                    handleDeleteRecord(value.row.original._id)
+                    handleDestroyRecord(value.row.original.rol_id)
                   }}>
                   <i className="align-middle ltr:mr-2 rtl:ml-2 ri-delete-bin-line"></i>{' '}
                   <span>Delete</span>
@@ -278,47 +226,25 @@ const CategoryList = () => {
       },
     ],
     [
-      deletedListData,
-      handleChangeStatusProduct,
-      handleEditProduct,
-      handleOverviewProduct,
+      deletedSelectedRecord,
+      handleUpdateRecord,
       handleSelectAll,
       selectAll,
     ]
   )
 
-  // Filter data based on search term and applied filters
+  // filtered data for table
   const filteredData = useMemo(() => {
-    return allProductList.filter((item) => {
+    return allCategoryList.filter((item) => {
       const matchesSearchTerm =
-        item.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchTerm.toLowerCase())
-
-      const matchesPriceRange =
-        item.price >= priceRange[0] && item.price <= priceRange[1]
-
-      const matchesTypeProducts =
-        !selectedProductOption ||
-        selectedProductOption.value === 'All' ||
-        item.category === selectedProductOption.value
-      const matchesPublishedFilter = appliedFilters.isPublished
-        ? item.status === 'Published'
-        : true
-      const matchesInactiveFilter = appliedFilters.isInactive
-        ? item.status === 'Inactive'
-        : true
-
+        item.category_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.category_name.toLowerCase().includes(searchTerm.toLowerCase())
       return (
-        matchesSearchTerm &&
-        matchesTypeProducts &&
-        matchesPublishedFilter &&
-        matchesInactiveFilter &&
-        matchesPriceRange
+        matchesSearchTerm
       )
     })
   }, [
-    allProductList,
+    allCategoryList,
     searchTerm,
     appliedFilters,
     selectedProductOption,
@@ -367,7 +293,7 @@ const CategoryList = () => {
   }
 
   const exportTable = () => {
-    if (!productList || productList.length === 0) return
+    if (!categoryList || categoryList.length === 0) return
 
     // Prepare CSV headers based on ProductListItem interface
     const headers = [
@@ -398,9 +324,9 @@ const CategoryList = () => {
     ]
 
     let csvContent = headers.join(',') + '\n'
-    productList.forEach((product) => {
+    categoryList.forEach((user) => {
       const row = headers.map((header) => {
-        const value = product[header]
+        const value = user[header]
         if (Array.isArray(value)) {
           return `"${value.join(',')}"`
         }
@@ -445,7 +371,7 @@ const CategoryList = () => {
                 className="btn btn-primary"
                 onClick={(e) => {
                   e.preventDefault()
-                  handleAddProduct()
+                  handleCreate()
                 }}>
                 <Plus className="inline-block ltr:mr-1 rtl:ml-1 align-center size-4" />{' '}
                 Add Category
@@ -478,10 +404,10 @@ const CategoryList = () => {
             </div>
             <div>
               <div className="flex items-center gap-3">
-                {deletedListData.length > 0 && (
+                {deletedSelectedRecord.length > 0 && (
                   <button
                     className="btn btn-red btn-icon"
-                    onClick={handleRemoveSelectedRecords}>
+                    onClick={handleDestroyRecordSelected}>
                     <Trash className="inline-block size-4" />
                   </button>
                 )}
@@ -614,7 +540,7 @@ const CategoryList = () => {
       <DeleteModal
         show={isModalOpen}
         handleHide={() => setIsModalOpen(false)}
-        deleteModalFunction={setDeleteRecord}
+        deleteModalFunction={destroyRecord}
       />
     </React.Fragment>
   )

@@ -7,7 +7,8 @@ export const REACT_APP_USER_API = apiUrl('/api/users')
 // Role API
 export const REACT_APP_ROLE_API = apiUrl('/api/roles')
 
-
+// Category API
+export const REACT_APP_CATEGORY_API = apiUrl('/api/categories')
 
 
 
@@ -40,7 +41,6 @@ export const REACT_APP_CALENDAR_API = apiUrl('/api/calendar')
 export const REACT_APP_ORDER_API = apiUrl('/api/order')
 
 // CATEGORY LIST API
-export const REACT_APP_CATEGORY_API = apiUrl('/api/category')
 
 // EMAIL API
 export const REACT_APP_EMAIL_API = apiUrl('/api/email')

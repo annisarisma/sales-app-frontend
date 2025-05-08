@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import BreadCrumb from '@src/components/Common/BreadCrumb'
 import { countryCode } from '@src/data'
@@ -7,30 +7,42 @@ import {
   updateUser,
   getUserById,
 } from '@src/slices/masterData/users/thunk'
-import Flatpickr from 'react-flatpickr'
+import {
+  getRole,
+} from '@src/slices/masterData/roles/thunk'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import Select from 'react-select'
 
-const roleItems = [
-  { label: 'Admin', value: 'Admin' },
-  { label: 'Superadmin', value: 'Superadmin' },
-]
-
-const categoryItems = [
-  { label: 'Male', value: 'Male' },
-  { label: 'Female', value: 'Female' },
-]
-
 const UserCreate = () => {
-  const { userById, userList } = useSelector((state) => state.UserList)
+  const { userList, userById } = useSelector((state) => state.UserList)
+  const { roleList } = useSelector((state) => state.RoleList)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [userData, setUserData] = useState(null);
+  const [allUserList, setAllUserList] = useState(null);
+  const [allRoleList, setAllRoleList] = useState([]);
 
   console.log('user list ini: ', userList);
+
+  useEffect(() => {
+    console.log('ini role state: ', roleList);
+    if (!roleList) {
+      dispatch(getRole());
+    } else {
+      setAllRoleList(roleList)
+    }
+  }, [roleList, dispatch]);
+
+  const roleItems = useMemo(() => {
+    console.log('ini isi rol item: ', allRoleList)
+    return allRoleList?.map(role => ({
+      label: role.role_name,
+      value: role.rol_id
+    })) || [];
+  }, [allRoleList]);
+  
 
   useEffect(() => {
     document.title =
@@ -41,7 +53,7 @@ const UserCreate = () => {
     if (!userById) {
       dispatch(getUserById(id));
     } else {
-      setUserData(userById);
+      setAllUserList(userById);
     }
   }, [userById, dispatch]);
   
@@ -109,9 +121,9 @@ const UserCreate = () => {
   }
 
   const submitForm = (data) => {
-    if (id && userData) {
+    if (id && allUserList) {
       console.log('masuk edit');
-      const updatedRequest = { ...data, usrId: userData.usr_id }
+      const updatedRequest = { ...data, _id: allUserList.usr_id }
       // thunk process
       console.log('masuk edit data: ', updatedRequest);
       dispatch(updateUser(updatedRequest))
@@ -128,15 +140,15 @@ const UserCreate = () => {
   }
 
   useEffect(() => {
-    if (userData) {
-      setValue('username', userData.username)
-      setValue('email', userData.email)
-      setValue('role', userData.rol_id)
+    if (allUserList) {
+      setValue('username', allUserList.username)
+      setValue('email', allUserList.email)
+      setValue('rol_id', allUserList.rol_id)
     } else {
       resetForm()
       clearErrors()
     }
-  }, [resetForm, userData, id, setValue, clearErrors])
+  }, [resetForm, allUserList, id, setValue, clearErrors])
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -226,7 +238,7 @@ const UserCreate = () => {
                   </div>
                 </div>
 
-                {!userData && (
+                {!allUserList && (
                   <div className="col-span-12 md:col-span-6 xl:col-span-6">
                     <label htmlFor="password" className="form-label">
                       Password <span className="text-red-500">*</span>

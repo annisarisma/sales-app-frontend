@@ -28,7 +28,7 @@ const ListSlice = createSlice({
       const updatedUser = action.payload
       if (state.userList !== null) {
         const existingUser = state.userList.findIndex(
-          (userItem) => userItem.usr_id === updatedUser.usrId
+          (userItem) => userItem.usr_id === updatedUser.usr_id
         )
         if (existingUser !== -1) {
           state.userList[existingUser] = updatedUser

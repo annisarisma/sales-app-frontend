@@ -173,7 +173,7 @@ const UserList = () => {
     if (selectAll) {
       setDeletedSelectedData([])
     } else {
-      setDeletedSelectedData(allUserList.map((order) => order._id))
+      setDeletedSelectedData(allUserList.map((order) => order.usr_id))
     }
     setSelectAll((prev) => !prev)
   }, [selectAll, allUserList])
@@ -230,7 +230,7 @@ const UserList = () => {
       },
       {
         header: 'Role',
-        accessorKey: 'rol_id',
+        accessorKey: 'role_name',
       },
       {
         header: 'Action',

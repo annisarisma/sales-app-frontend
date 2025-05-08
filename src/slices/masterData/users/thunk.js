@@ -69,7 +69,7 @@ export const addUserData = (newRecord) => async (dispatch) => {
     )
     const { message } = response
     AddToast(message || 'User record added successfully')
-    dispatch(addUser(newRecord))
+    dispatch(addUser(response.data))
   } catch (error) {
     const errorMessage =
       error.response?.data?.message ||
@@ -83,13 +83,12 @@ export const addUserData = (newRecord) => async (dispatch) => {
 // update user
 export const updateUser = (record) => async (dispatch) => {
   try {
-    console.log(record);
     const response = await api.put(`${USER_API}`, record, 'User')
     
     const { message } = response;
     AddToast(message || 'User record added successfully')
      
-    dispatch(updateUserSuccess(record))
+    dispatch(updateUserSuccess(response.data))
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message || 'User addition failed.'
     ErrorToast(errorMessage)
