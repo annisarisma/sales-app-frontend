@@ -58,7 +58,7 @@ export const getRoleById = (id) => async (dispatch) => {
 export const createRole = (record) => async (dispatch) => {
   try {
     // axios
-    const response = await api.post(ROLE_API,record,'Role')
+    const response = await api.post(ROLE_API, record, 'Role')
     const { message } = response
     
     // toast and reducer

@@ -38,14 +38,17 @@ const RoleCreate = () => {
 
   // function submit
   const submitForm = (data) => {
-    console.log('submit information: ', editMode, roleById)
+    const formData = new FormData();
+    formData.append('role_code', data.role_code);
+    formData.append('role_name', data.role_name);
+    formData.append('role_description', data.role_description);
+    
     if (editMode && roleById) {
-      const updatedRequest = { ...data, _id: roleById.rol_id }
-      dispatch(updateRole(updatedRequest))
+      formData.append('rolId', roleById.rol_id);
+      dispatch(updateRole(formData))
       navigate('/master-data/role')
     } else {
-      const createdRequest = { ...data, rolId: roleList.length + 1 }
-      dispatch(createRole(createdRequest))
+      dispatch(createRole(formData))
       navigate('/master-data/role')
       resetForm()
       clearErrors()
@@ -93,7 +96,7 @@ const RoleCreate = () => {
       <BreadCrumb title="Create Role" subTitle="Master Data" />
         <div className="card">
           <div className="card-body">
-            <form onSubmit={handleSubmit(submitForm)}>
+            <form onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
               <div className="grid grid-cols-12 gap-space">
 
                 {/* Role Code */}

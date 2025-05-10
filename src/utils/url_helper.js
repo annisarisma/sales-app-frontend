@@ -9,6 +9,8 @@ export const REACT_APP_ROLE_API = apiUrl('/api/roles')
 export const REACT_APP_CATEGORY_API = apiUrl('/api/categories')
 // Product API
 export const REACT_APP_PRODUCT_API = apiUrl('/api/products')
+// Product API
+export const REACT_APP_IMAGE_API = apiUrl('/api/images')
 
 
 

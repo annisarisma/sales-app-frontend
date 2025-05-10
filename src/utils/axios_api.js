@@ -34,11 +34,10 @@ api.post = async (api, newRecord, field) => {
 
   try {
     const response = await axios.post(
-      api,
-      { ...newRecord, _id: newRecord.id },
+      api, newRecord,
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       }
     )
@@ -58,11 +57,10 @@ api.post = async (api, newRecord, field) => {
 api.put = async (api, updatedRecord, field) => {
   try {
     const response = await axios.put(
-      `${api}/${updatedRecord._id}`,
-      updatedRecord,
+      `${api}`, updatedRecord,
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       }
     )

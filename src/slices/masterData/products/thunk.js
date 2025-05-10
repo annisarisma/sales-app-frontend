@@ -58,7 +58,7 @@ export const getProductById = (id) => async (dispatch) => {
 export const createProduct = (record) => async (dispatch) => {
   try {
     // axios
-    const response = await api.post(PRODUCT_API,record,'Product')
+    const response = await api.post(PRODUCT_API, record, 'Product')
     const { message } = response
     
     // toast and reducer
@@ -77,7 +77,7 @@ export const createProduct = (record) => async (dispatch) => {
   }
 }
 
-// update user
+// update
 export const updateProduct = (record) => async (dispatch) => {
   try {
     // axios
@@ -97,7 +97,7 @@ export const updateProduct = (record) => async (dispatch) => {
   }
 }
 
-// destroy user
+// destroy
 export const destroyProduct = (reviews) => async (dispatch) => {
   try {
     const deletePromises = reviews.map(async (prdId) => {
